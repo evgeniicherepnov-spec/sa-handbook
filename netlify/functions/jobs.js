@@ -1,4 +1,4 @@
-const TAVILY_API = 'https://api.tavily.com/search';
+const HH_RSS = 'https://hh.ru/search/vacancy/rss';
 
 const ROLE_TEXT = {
   sa: 'системный аналитик',
@@ -6,36 +6,54 @@ const ROLE_TEXT = {
   fs: 'fullstack разработчик',
 };
 
-const CITY_TEXT = {
-  all:    '',
-  moscow: 'Москва',
-  spb:    'Санкт-Петербург',
-  remote: 'удалённо',
-};
+const HH_AREA = { all: '113', moscow: '1', spb: '2' };
 
-const DOMAIN_NAME = {
-  'hh.ru':             'HH.ru',
-  'superjob.ru':       'SuperJob',
-  'career.habr.com':   'Habr Career',
-  'avito.ru':          'Авито Работа',
-};
+function parseRSS(xml) {
+  const items = [];
+  const itemRe = /<item>([\s\S]*?)<\/item>/g;
+  let m;
+  while ((m = itemRe.exec(xml)) !== null) {
+    const block = m[1];
+    const title   = tag(block, 'title');
+    const link    = tag(block, 'link') || cdata(block, 'link');
+    const pubDate = tag(block, 'pubDate');
+    const desc    = cdata(block, 'description') || tag(block, 'description');
 
-function domainOf(url) {
-  try {
-    const h = new URL(url).hostname.replace('www.', '');
-    for (const d of Object.keys(DOMAIN_NAME)) {
-      if (h.includes(d)) return d;
-    }
-    return h;
-  } catch { return ''; }
+    // из description вытаскиваем компанию, зарплату, город, сниппет
+    const stripped = desc.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+    const salary   = extractSalary(stripped);
+    const lines    = desc.split(/<br\s*\/?>/i).map(l => l.replace(/<[^>]+>/g,'').trim()).filter(Boolean);
+
+    items.push({
+      title:   title.replace(/&quot;/g,'"').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>'),
+      url:     link.trim(),
+      company: lines[0] || '',
+      city:    lines[1] || '',
+      salary:  salary,
+      snippet: stripped.slice(0, 280),
+      pubDate,
+    });
+  }
+  return items;
+}
+
+function tag(s, name) {
+  const m = s.match(new RegExp(`<${name}>([^<]*)</${name}>`));
+  return m ? m[1].trim() : '';
+}
+
+function cdata(s, name) {
+  const m = s.match(new RegExp(`<${name}>[^<]*<!\\[CDATA\\[([\\s\\S]*?)\\]\\]>[^<]*</${name}>`));
+  return m ? m[1] : '';
 }
 
 function extractSalary(text) {
-  const m = text.match(/(\d[\d\s]*)\s*[–—-]\s*(\d[\d\s]*)\s*[₽руб]/i)
-    || text.match(/от\s*(\d[\d\s]*)\s*[₽руб]/i)
-    || text.match(/до\s*(\d[\d\s]*)\s*[₽руб]/i);
+  const m = text.match(/(\d[\d\s]*)\s*[–—-]\s*(\d[\d\s]*)\s*руб/i)
+    || text.match(/от\s*(\d[\d\s]*)\s*руб/i)
+    || text.match(/до\s*(\d[\d\s]*)\s*руб/i)
+    || text.match(/(\d[\d\s]+)\s*руб/i);
   if (!m) return null;
-  return m[0].replace(/\s+/g, ' ').trim();
+  return m[0].replace(/\s+/g,' ').trim();
 }
 
 export async function handler(event) {
@@ -51,49 +69,29 @@ export async function handler(event) {
     };
   }
 
-  const apiKey = process.env.TAVILY_API_KEY;
-  if (!apiKey) {
-    return {
-      statusCode: 500,
-      headers: { 'Access-Control-Allow-Origin': '*' },
-      body: JSON.stringify({ error: 'TAVILY_API_KEY not configured' }),
-    };
-  }
-
   const params = event.queryStringParameters || {};
   const role = params.role || 'sa';
   const city = params.city || 'all';
 
-  const roleText = ROLE_TEXT[role] || 'системный аналитик';
-  const cityText = CITY_TEXT[city] || '';
-  const query = `вакансия ${roleText}${cityText ? ' ' + cityText : ''} требования зарплата`;
+  const text = ROLE_TEXT[role] || 'системный аналитик';
+  const area = HH_AREA[city] || '113';
+
+  const qs = new URLSearchParams({
+    text,
+    area,
+    per_page: '20',
+    order_by: 'publication_time',
+  });
+  if (city === 'remote') qs.set('schedule', 'remote');
 
   try {
-    const resp = await fetch(TAVILY_API, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        api_key:      apiKey,
-        query,
-        search_depth: 'basic',
-        max_results:  15,
-        include_domains: ['hh.ru', 'superjob.ru', 'career.habr.com', 'avito.ru'],
-      }),
+    const res = await fetch(`${HH_RSS}?${qs}`, {
+      headers: { 'Accept': 'application/rss+xml, application/xml, text/xml' },
     });
 
-    if (!resp.ok) throw new Error(`Tavily ${resp.status}`);
-    const data = await resp.json();
-
-    const items = (data.results || []).map(r => {
-      const domain = domainOf(r.url);
-      return {
-        title:      r.title,
-        url:        r.url,
-        source:     DOMAIN_NAME[domain] || domain,
-        snippet:    (r.content || '').slice(0, 300),
-        salary:     extractSalary(r.content || ''),
-      };
-    });
+    if (!res.ok) throw new Error(`HH.ru RSS ${res.status}`);
+    const xml = await res.text();
+    const items = parseRSS(xml);
 
     return {
       statusCode: 200,
