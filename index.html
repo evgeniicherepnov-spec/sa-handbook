@@ -7862,6 +7862,45 @@ function _jobsUpdatePlatforms(){
     </a>`).join('');
 }
 
+async function _fetchHHDirect(role, level, city) {
+  const CURRENCY_MAP = { RUR:'₽', USD:'$', EUR:'€', KZT:'₸', UAH:'₴', BYR:'Br' };
+  const params = new URLSearchParams({
+    text:      HH_ROLE[role] || 'системный аналитик',
+    per_page:  '20',
+    page:      '0',
+    order_by:  'publication_time',
+    area:      String(HH_AREA[city] || 113),
+  });
+  if (level !== 'all' && HH_EXP[level]) params.set('experience', HH_EXP[level]);
+  if (city === 'remote') params.set('schedule', 'remote');
+
+  const res = await fetch(`https://api.hh.ru/vacancies?${params}`);
+  if (!res.ok) throw new Error(`HH.ru ${res.status}`);
+  const data = await res.json();
+
+  return (data.items || []).map(v => {
+    const s = v.salary;
+    let salary = null;
+    if (s) {
+      const cur = CURRENCY_MAP[s.currency] || s.currency;
+      if (s.from && s.to) salary = `${s.from.toLocaleString('ru')} – ${s.to.toLocaleString('ru')} ${cur}`;
+      else if (s.from)    salary = `от ${s.from.toLocaleString('ru')} ${cur}`;
+      else if (s.to)      salary = `до ${s.to.toLocaleString('ru')} ${cur}`;
+    }
+    const snip = [v.snippet?.requirement, v.snippet?.responsibility]
+      .filter(Boolean).join(' · ').replace(/<[^>]+>/g,'').slice(0, 250);
+    return {
+      id: `hh_${v.id}`, source:'hh', sourceName:'HH.ru',
+      title: v.name, company: v.employer?.name || '',
+      logo: v.employer?.logo_urls?.['90'] || null,
+      salary, city: v.area?.name || '',
+      experience: v.experience?.name || '',
+      schedule: v.schedule?.name || '',
+      snippet: snip, url: v.alternate_url, publishedAt: v.published_at,
+    };
+  });
+}
+
 async function jobsLoad(){
   const btn  = document.getElementById('jobs-load-btn');
   const grid = document.getElementById('jobs-grid');
@@ -7873,24 +7912,18 @@ async function jobsLoad(){
   grid.innerHTML = `<div class="jobs-state">
     <div class="jobs-spinner"></div>
     <div class="jobs-state-title">Загружаем вакансии</div>
-    <div class="jobs-state-sub">Ищем на HH.ru и SuperJob…</div>
+    <div class="jobs-state-sub">Ищем на HH.ru…</div>
   </div>`;
 
   const { role, level, city } = _jobsF;
-  const apiUrl = `/.netlify/functions/jobs?role=${role}&level=${level}&city=${city}`;
 
   try {
-    const resp = await fetch(apiUrl);
-    if(!resp.ok){
-      const text = await resp.text().catch(() => '');
-      throw new Error(`HTTP ${resp.status}: ${text.slice(0,200)}`);
-    }
-    const data = await resp.json();
+    const items = await _fetchHHDirect(role, level, city);
 
     btn.disabled = false;
     btn.textContent = '↻ Обновить';
 
-    if(!data.items?.length){
+    if (!items.length) {
       grid.innerHTML = `<div class="jobs-state">
         <div class="jobs-state-icon">🔍</div>
         <div class="jobs-state-title">Вакансии не найдены</div>
@@ -7899,14 +7932,10 @@ async function jobsLoad(){
       return;
     }
 
-    const parts = [
-      data.sources?.hh ? `HH.ru: ${data.sources.hh}` : '',
-      data.sources?.sj ? `SuperJob: ${data.sources.sj}` : '',
-    ].filter(Boolean).join(' · ');
-    meta.textContent = `Итого ${data.total} вакансий · ${parts} · обновлено только что`;
-    grid.innerHTML = data.items.map(_jobCard).join('');
+    meta.textContent = `HH.ru: ${items.length} вакансий · обновлено только что`;
+    grid.innerHTML = items.map(_jobCard).join('');
 
-  } catch(e){
+  } catch(e) {
     btn.disabled = false;
     btn.textContent = '↻ Обновить';
     grid.innerHTML = `<div class="jobs-state">
@@ -7914,7 +7943,7 @@ async function jobsLoad(){
       <div class="jobs-state-title">Не удалось загрузить</div>
       <div class="jobs-state-sub">${e.message}</div>
     </div>`;
-    console.error('Jobs API error:', e);
+    console.error('Jobs error:', e);
   }
 }
 
