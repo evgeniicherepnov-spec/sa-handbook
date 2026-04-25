@@ -6687,12 +6687,9 @@ async function trSendToAPI(userMsg, isSystem=false, isHint=false){
   }
 
   try {
-    const resp = await fetch('https://api.openai.com/v1/chat/completions', {
+    const resp = await fetch('/.netlify/functions/ai', {
       method: 'POST',
-      headers: {
-        'Content-Type':  'application/json',
-        'Authorization': `Bearer ${OPENAI_API_KEY}`
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         model:       'gpt-4o',
         max_tokens:  1200,
@@ -7702,9 +7699,9 @@ async function aiCallAPI(){
   aiAddTyping(typingId);
 
   try {
-    const resp = await fetch('https://api.openai.com/v1/chat/completions', {
+    const resp = await fetch('/.netlify/functions/ai', {
       method:  'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${OPENAI_API_KEY}` },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         model:       'gpt-4o',
         max_tokens:  700,
