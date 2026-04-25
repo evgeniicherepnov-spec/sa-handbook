@@ -5938,7 +5938,6 @@ ROI = (<span class="tmpl-field">[выгода]</span> − <span class="tmpl-fiel
     <div class="jobs-btn-row">
       <button class="jobs-f-btn active" onclick="jobsFilter('role','sa',this)">Системный аналитик</button>
       <button class="jobs-f-btn" onclick="jobsFilter('role','ba',this)">Бизнес-аналитик</button>
-      <button class="jobs-f-btn" onclick="jobsFilter('role','pm',this)">Продакт-менеджер</button>
       <button class="jobs-f-btn" onclick="jobsFilter('role','fs',this)">Fullstack</button>
     </div>
   </div>
@@ -5955,6 +5954,20 @@ ROI = (<span class="tmpl-field">[выгода]</span> − <span class="tmpl-fiel
 
 <!-- Площадки -->
 <div class="jobs-platforms-grid" id="jobs-platform-links"></div>
+
+<!-- Карточки вакансий -->
+<div style="display:flex;align-items:center;justify-content:space-between;margin:32px 0 12px">
+  <h2 style="margin:0">Свежие вакансии</h2>
+  <button class="jobs-load-btn" id="jobs-load-btn" onclick="jobsLoad()">↻ Обновить</button>
+</div>
+<div id="jobs-meta" class="jobs-meta"></div>
+<div id="jobs-grid" class="jobs-grid">
+  <div class="jobs-state">
+    <div class="jobs-state-icon">🔍</div>
+    <div class="jobs-state-title">Нажми «Обновить»</div>
+    <div class="jobs-state-sub">AI-поисковик найдёт свежие вакансии с HH.ru, SuperJob и Habr</div>
+  </div>
+</div>
 </div>
 
 </main>
@@ -7798,6 +7811,58 @@ function jobsFilter(type, value, btn) {
     .querySelectorAll('.jobs-f-btn')
     .forEach(b => b.classList.toggle('active', b === btn));
   _jobsUpdatePlatforms();
+}
+
+async function jobsLoad() {
+  const btn  = document.getElementById('jobs-load-btn');
+  const grid = document.getElementById('jobs-grid');
+  const meta = document.getElementById('jobs-meta');
+
+  btn.disabled = true;
+  btn.textContent = 'Ищу…';
+  meta.textContent = '';
+  grid.innerHTML = `<div class="jobs-state">
+    <div class="jobs-spinner"></div>
+    <div class="jobs-state-title">AI ищет вакансии</div>
+    <div class="jobs-state-sub">Обходим HH.ru, SuperJob, Habr Career…</div>
+  </div>`;
+
+  const { role, city } = _jobsF;
+  try {
+    const resp = await fetch(`/.netlify/functions/jobs?role=${role}&city=${city}`);
+    const data = await resp.json();
+    btn.disabled = false;
+    btn.textContent = '↻ Обновить';
+
+    if (!data.items?.length) {
+      grid.innerHTML = `<div class="jobs-state">
+        <div class="jobs-state-icon">🔍</div>
+        <div class="jobs-state-title">Ничего не найдено</div>
+        <div class="jobs-state-sub">Попробуй другую роль или город</div>
+      </div>`;
+      return;
+    }
+
+    meta.textContent = `Найдено ${data.total} вакансий · обновлено только что`;
+    grid.innerHTML = data.items.map(v => `
+      <div class="job-card">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+          <span style="font-size:11px;padding:2px 10px;border-radius:10px;background:rgba(139,92,246,0.15);color:#c4b5fd;font-weight:600">${_e(v.source)}</span>
+        </div>
+        <div class="job-title">${_e(v.title)}</div>
+        ${v.salary ? `<div class="job-salary">${_e(v.salary)}</div>` : ''}
+        ${v.snippet ? `<div class="job-snippet" style="margin-top:6px">${_e(v.snippet)}</div>` : ''}
+        <a class="job-link" href="${_e(v.url)}" target="_blank" rel="noopener">Открыть вакансию →</a>
+      </div>`).join('');
+  } catch(e) {
+    btn.disabled = false;
+    btn.textContent = '↻ Обновить';
+    grid.innerHTML = `<div class="jobs-state">
+      <div class="jobs-state-icon">⚠️</div>
+      <div class="jobs-state-title">Ошибка поиска</div>
+      <div class="jobs-state-sub">${e.message}</div>
+    </div>`;
+  }
 }
 
 function _jobsUpdatePlatforms() {
