@@ -52,16 +52,19 @@ async function fetchHH(role, level, city) {
     order_by:       'publication_time',
   });
 
+  // Всегда ищем по России (113), если не выбран конкретный город
+  params.set('area', String(HH_AREA[city] || 113));
   if (level !== 'all' && HH_EXP[level]) params.set('experience', HH_EXP[level]);
-  if (city !== 'all' && HH_AREA[city])  params.set('area', String(HH_AREA[city]));
   if (city === 'remote')                params.set('schedule', 'remote');
 
   const res = await fetch(`${HH_API}?${params}`, {
     headers: { 'User-Agent': 'SA-Handbook/2.0' },
   });
 
+  console.log('HH.ru status:', res.status, 'url:', `${HH_API}?${params}`);
   if (!res.ok) throw new Error(`HH.ru error: ${res.status}`);
   const data = await res.json();
+  console.log('HH.ru items:', data.items?.length, 'found:', data.found);
 
   return (data.items || []).map(v => {
     const s   = v.salary;
