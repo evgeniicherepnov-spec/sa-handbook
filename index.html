@@ -434,21 +434,32 @@ svg.diagram { width: 100%; border-radius: 16px; background: rgba(0,0,0,0.3); bor
 .jobs-load-btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
 .jobs-platforms-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
   margin-bottom: 8px;
 }
 .jobs-plt-card {
-  display: flex; align-items: center; gap: 12px;
-  padding: 14px 16px; border-radius: 14px; text-decoration: none;
+  display: flex; flex-direction: column; gap: 14px;
+  padding: 22px 22px 18px; border-radius: 18px; text-decoration: none;
   border: 1px solid var(--border); background: var(--bg-glass);
-  transition: all .2s; color: var(--text);
+  transition: all .25s; color: var(--text); position: relative; overflow: hidden;
 }
-.jobs-plt-card:hover { border-color: var(--border-highlight); transform: translateY(-2px); background: var(--bg-glass-hover); box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
-.jobs-plt-icon { font-size: 22px; flex-shrink: 0; }
+.jobs-plt-card::before { content:''; position:absolute; inset:0; opacity:0; transition:.25s; background: radial-gradient(ellipse at 30% 0%, var(--plt-color,rgba(139,92,246,.15)) 0%, transparent 70%); }
+.jobs-plt-card:hover { border-color: var(--border-highlight); transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,0.25); }
+.jobs-plt-card:hover::before { opacity:1; }
+.jobs-plt-top { display:flex; align-items:center; gap:12px; }
+.jobs-plt-icon { font-size: 28px; flex-shrink: 0; }
 .jobs-plt-info { min-width: 0; }
-.jobs-plt-name { font-size: 13.5px; font-weight: 600; color: var(--text); }
-.jobs-plt-hint { font-size: 11px; color: var(--text3); margin-top: 2px; }
+.jobs-plt-name { font-size: 15px; font-weight: 700; color: var(--text); }
+.jobs-plt-domain { font-size: 11px; color: var(--text3); margin-top: 1px; }
+.jobs-plt-desc { font-size: 12.5px; color: var(--text2); line-height: 1.6; }
+.jobs-plt-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 9px 16px; border-radius: 10px; font-size: 12.5px; font-weight: 600;
+  background: rgba(255,255,255,0.06); border: 1px solid var(--border);
+  color: var(--text); transition: all .2s; align-self: flex-start;
+}
+.jobs-plt-card:hover .jobs-plt-btn { background: rgba(255,255,255,0.1); border-color: var(--border-highlight); }
 .jobs-meta { font-size: 12px; color: var(--text3); margin-bottom: 16px; }
 .jobs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
 .job-card {
@@ -5917,7 +5928,7 @@ ROI = (<span class="tmpl-field">[выгода]</span> − <span class="tmpl-fiel
 <div class="section-header">
   <div class="section-tag">Карьера · Рынок</div>
   <div class="section-title">Вакансии для аналитиков</div>
-  <div class="section-desc">Свежие вакансии с HH.ru и SuperJob обновляются автоматически. Ниже — прямые ссылки на поиск на других крупных площадках.</div>
+  <div class="section-desc">Выбери роль и город — ссылки на всех площадках обновятся автоматически. Один клик — и ты уже на нужном поиске.</div>
 </div>
 
 <!-- Фильтры -->
@@ -5927,16 +5938,8 @@ ROI = (<span class="tmpl-field">[выгода]</span> − <span class="tmpl-fiel
     <div class="jobs-btn-row">
       <button class="jobs-f-btn active" onclick="jobsFilter('role','sa',this)">Системный аналитик</button>
       <button class="jobs-f-btn" onclick="jobsFilter('role','ba',this)">Бизнес-аналитик</button>
+      <button class="jobs-f-btn" onclick="jobsFilter('role','pm',this)">Продакт-менеджер</button>
       <button class="jobs-f-btn" onclick="jobsFilter('role','fs',this)">Fullstack</button>
-    </div>
-  </div>
-  <div class="jobs-filter-group">
-    <div class="jobs-filter-label">Уровень</div>
-    <div class="jobs-btn-row">
-      <button class="jobs-f-btn active" onclick="jobsFilter('level','all',this)">Все</button>
-      <button class="jobs-f-btn" onclick="jobsFilter('level','junior',this)">Junior</button>
-      <button class="jobs-f-btn" onclick="jobsFilter('level','middle',this)">Middle</button>
-      <button class="jobs-f-btn" onclick="jobsFilter('level','senior',this)">Senior</button>
     </div>
   </div>
   <div class="jobs-filter-group">
@@ -5944,26 +5947,14 @@ ROI = (<span class="tmpl-field">[выгода]</span> − <span class="tmpl-fiel
     <div class="jobs-btn-row">
       <button class="jobs-f-btn active" onclick="jobsFilter('city','all',this)">Вся Россия</button>
       <button class="jobs-f-btn" onclick="jobsFilter('city','moscow',this)">Москва</button>
-      <button class="jobs-f-btn" onclick="jobsFilter('city','spb',this)">СПб</button>
+      <button class="jobs-f-btn" onclick="jobsFilter('city','spb',this)">Санкт-Петербург</button>
       <button class="jobs-f-btn" onclick="jobsFilter('city','remote',this)">Удалённо</button>
     </div>
   </div>
-  <button class="jobs-load-btn" id="jobs-load-btn" onclick="jobsLoad()">↻ Обновить</button>
 </div>
 
-<!-- Другие площадки -->
-<h2 style="margin-bottom:14px">Другие площадки</h2>
+<!-- Площадки -->
 <div class="jobs-platforms-grid" id="jobs-platform-links"></div>
-
-<!-- Результаты -->
-<h2 style="margin:28px 0 8px">Свежие вакансии</h2>
-<div id="jobs-meta" class="jobs-meta"></div>
-<div id="jobs-grid" class="jobs-grid">
-  <div class="jobs-state">
-    <div class="jobs-spinner"></div>
-    <div class="jobs-state-title">Загружаем вакансии…</div>
-  </div>
-</div>
 </div>
 
 </main>
@@ -6173,7 +6164,6 @@ function go(tab,btn){
   }
   if(tab === 'jobs'){
     _jobsUpdatePlatforms();
-    jobsLoad();
   }
 }
 
@@ -7786,207 +7776,97 @@ function aiRender(text){
 }
 
 /* ═══════════════════════════════════════
-   ВАКАНСИИ — HH.RU API
+   ВАКАНСИИ — ПРЯМЫЕ ССЫЛКИ
 ═══════════════════════════════════════ */
-const HH_ROLE = {
+const JOBS_ROLE_TEXT = {
   sa: 'системный аналитик',
   ba: 'бизнес-аналитик',
+  pm: 'продакт менеджер',
   fs: 'fullstack разработчик',
 };
-const HH_EXP = {
-  all:    null,
-  junior: 'noExperience',
-  middle: 'between1And3',
-  senior: 'between3And6',
-};
-const HH_AREA = { all: 113, moscow: 1, spb: 2 };
-const HH_CUR  = { RUR:'₽', USD:'$', EUR:'€', KZT:'₸', UAH:'₴', BYR:'Br' };
 
-let _jobsF = { role:'sa', level:'all', city:'all' };
+const JOBS_CITY_HH = { all: '', moscow: '&area=1', spb: '&area=2', remote: '&schedule=remote' };
+const JOBS_CITY_SJ = { all: '', moscow: '&town=4', spb: '&town=14', remote: '&place_of_work=2' };
+const JOBS_CITY_HABR = { all: '', moscow: '&locations[]=c_678', spb: '&locations[]=c_679', remote: '&type=remote' };
+const JOBS_CITY_AVITO = { all: 'rossiya', moscow: 'moskva', spb: 'sankt-peterburg', remote: 'rossiya' };
 
-function jobsFilter(type, value, btn){
+let _jobsF = { role: 'sa', city: 'all' };
+
+function jobsFilter(type, value, btn) {
   _jobsF[type] = value;
   btn.closest('.jobs-btn-row')
     .querySelectorAll('.jobs-f-btn')
     .forEach(b => b.classList.toggle('active', b === btn));
   _jobsUpdatePlatforms();
-  jobsLoad();
 }
 
-function _jobsUpdatePlatforms(){
-  const roleText = HH_ROLE[_jobsF.role] || 'системный аналитик';
-  const q = encodeURIComponent(roleText);
+function _jobsUpdatePlatforms() {
   const el = document.getElementById('jobs-platform-links');
-  if(!el) return;
+  if (!el) return;
+
+  const role = _jobsF.role;
+  const city = _jobsF.city;
+  const text = JOBS_ROLE_TEXT[role] || 'системный аналитик';
+  const q = encodeURIComponent(text);
+
+  const hhCity   = JOBS_CITY_HH[city]   || '';
+  const sjCity   = JOBS_CITY_SJ[city]   || '';
+  const habrCity = JOBS_CITY_HABR[city] || '';
+  const avitoGeo = JOBS_CITY_AVITO[city] || 'rossiya';
+  const liLoc    = city === 'moscow' ? 'Moscow, Russia' : city === 'spb' ? 'Saint Petersburg, Russia' : 'Russia';
 
   const platforms = [
     {
-      name: 'SuperJob', hint: 'superjob.ru',
-      icon: '🔵',
-      url: `https://www.superjob.ru/vacancy/search/?keywords=${q}`,
+      icon: '🔴', name: 'HH.ru', domain: 'hh.ru',
+      desc: '№1 в России — миллионы вакансий, удобные фильтры, отклик в один клик',
+      color: 'rgba(255,60,60,0.12)',
+      url: `https://hh.ru/search/vacancy?text=${q}${hhCity}&order_by=publication_time`,
     },
     {
-      name: 'Habr Career', hint: 'career.habr.com',
-      icon: '🟠',
-      url: `https://career.habr.com/vacancies?q=${q}&type=all`,
+      icon: '🔵', name: 'SuperJob', domain: 'superjob.ru',
+      desc: 'Вторая по размеру площадка, много IT и аналитических позиций',
+      color: 'rgba(60,130,255,0.12)',
+      url: `https://www.superjob.ru/vacancy/search/?keywords=${q}${sjCity}`,
     },
     {
-      name: 'LinkedIn', hint: 'linkedin.com',
-      icon: '🔷',
-      url: `https://www.linkedin.com/jobs/search/?keywords=${q}&location=Russia`,
+      icon: '🟠', name: 'Habr Career', domain: 'career.habr.com',
+      desc: 'Лучшая площадка для IT-специалистов, честные зарплаты, крутые компании',
+      color: 'rgba(255,130,60,0.12)',
+      url: `https://career.habr.com/vacancies?q=${q}${habrCity}&type=all`,
     },
     {
-      name: 'Авито Работа', hint: 'avito.ru',
-      icon: '🟢',
-      url: `https://www.avito.ru/rossiya/vakansii?q=${q}`,
+      icon: '🟢', name: 'Авито Работа', domain: 'avito.ru',
+      desc: 'Растущая площадка, много региональных и удалённых вакансий',
+      color: 'rgba(60,200,100,0.12)',
+      url: `https://www.avito.ru/${avitoGeo}/vakansii?q=${q}`,
     },
     {
-      name: 'Работа.ру', hint: 'rabota.ru',
-      icon: '🔴',
+      icon: '🔷', name: 'LinkedIn', domain: 'linkedin.com',
+      desc: 'Международные компании и удалёнка, сетевые связи с рынком',
+      color: 'rgba(60,130,255,0.12)',
+      url: `https://www.linkedin.com/jobs/search/?keywords=${encodeURIComponent(text)}&location=${encodeURIComponent(liLoc)}`,
+    },
+    {
+      icon: '🟣', name: 'Работа.ру', domain: 'rabota.ru',
+      desc: 'Широкий охват регионов России, удобный поиск по специальности',
+      color: 'rgba(160,60,255,0.12)',
       url: `https://www.rabota.ru/vacancy?query=${q}`,
-    },
-    {
-      name: 'Зарплата.ру', hint: 'zarplata.ru',
-      icon: '🟣',
-      url: `https://www.zarplata.ru/vacancies/search?q=${q}`,
     },
   ];
 
   el.innerHTML = platforms.map(p => `
-    <a class="jobs-plt-card" href="${p.url}" target="_blank" rel="noopener">
-      <div class="jobs-plt-icon">${p.icon}</div>
-      <div class="jobs-plt-info">
-        <div class="jobs-plt-name">${p.name}</div>
-        <div class="jobs-plt-hint">${p.hint} →</div>
+    <a class="jobs-plt-card" href="${p.url}" target="_blank" rel="noopener"
+       style="--plt-color:${p.color}">
+      <div class="jobs-plt-top">
+        <div class="jobs-plt-icon">${p.icon}</div>
+        <div class="jobs-plt-info">
+          <div class="jobs-plt-name">${p.name}</div>
+          <div class="jobs-plt-domain">${p.domain}</div>
+        </div>
       </div>
+      <div class="jobs-plt-desc">${p.desc}</div>
+      <div class="jobs-plt-btn">Найти вакансии →</div>
     </a>`).join('');
-}
-
-async function _fetchHHDirect(role, level, city) {
-  const CURRENCY_MAP = { RUR:'₽', USD:'$', EUR:'€', KZT:'₸', UAH:'₴', BYR:'Br' };
-  const params = new URLSearchParams({
-    text:      HH_ROLE[role] || 'системный аналитик',
-    per_page:  '20',
-    page:      '0',
-    order_by:  'publication_time',
-    area:      String(HH_AREA[city] || 113),
-  });
-  if (level !== 'all' && HH_EXP[level]) params.set('experience', HH_EXP[level]);
-  if (city === 'remote') params.set('schedule', 'remote');
-
-  const res = await fetch(`https://api.hh.ru/vacancies?${params}`);
-  if (!res.ok) throw new Error(`HH.ru ${res.status}`);
-  const data = await res.json();
-
-  return (data.items || []).map(v => {
-    const s = v.salary;
-    let salary = null;
-    if (s) {
-      const cur = CURRENCY_MAP[s.currency] || s.currency;
-      if (s.from && s.to) salary = `${s.from.toLocaleString('ru')} – ${s.to.toLocaleString('ru')} ${cur}`;
-      else if (s.from)    salary = `от ${s.from.toLocaleString('ru')} ${cur}`;
-      else if (s.to)      salary = `до ${s.to.toLocaleString('ru')} ${cur}`;
-    }
-    const snip = [v.snippet?.requirement, v.snippet?.responsibility]
-      .filter(Boolean).join(' · ').replace(/<[^>]+>/g,'').slice(0, 250);
-    return {
-      id: `hh_${v.id}`, source:'hh', sourceName:'HH.ru',
-      title: v.name, company: v.employer?.name || '',
-      logo: v.employer?.logo_urls?.['90'] || null,
-      salary, city: v.area?.name || '',
-      experience: v.experience?.name || '',
-      schedule: v.schedule?.name || '',
-      snippet: snip, url: v.alternate_url, publishedAt: v.published_at,
-    };
-  });
-}
-
-async function jobsLoad(){
-  const btn  = document.getElementById('jobs-load-btn');
-  const grid = document.getElementById('jobs-grid');
-  const meta = document.getElementById('jobs-meta');
-
-  btn.disabled = true;
-  btn.textContent = 'Загружаю…';
-  meta.textContent = '';
-  grid.innerHTML = `<div class="jobs-state">
-    <div class="jobs-spinner"></div>
-    <div class="jobs-state-title">Загружаем вакансии</div>
-    <div class="jobs-state-sub">Ищем на HH.ru…</div>
-  </div>`;
-
-  const { role, level, city } = _jobsF;
-
-  try {
-    const items = await _fetchHHDirect(role, level, city);
-
-    btn.disabled = false;
-    btn.textContent = '↻ Обновить';
-
-    if (!items.length) {
-      grid.innerHTML = `<div class="jobs-state">
-        <div class="jobs-state-icon">🔍</div>
-        <div class="jobs-state-title">Вакансии не найдены</div>
-        <div class="jobs-state-sub">Попробуй другие фильтры — рынок меняется каждый день</div>
-      </div>`;
-      return;
-    }
-
-    meta.textContent = `HH.ru: ${items.length} вакансий · обновлено только что`;
-    grid.innerHTML = items.map(_jobCard).join('');
-
-  } catch(e) {
-    btn.disabled = false;
-    btn.textContent = '↻ Обновить';
-    grid.innerHTML = `<div class="jobs-state">
-      <div class="jobs-state-icon">⚠️</div>
-      <div class="jobs-state-title">Не удалось загрузить</div>
-      <div class="jobs-state-sub">${e.message}</div>
-    </div>`;
-    console.error('Jobs error:', e);
-  }
-}
-
-function _jobCard(v){
-  // Unified format from our API: { id, source, sourceName, title, company, logo, salary, city, experience, schedule, snippet, url, publishedAt }
-  const logo   = v.logo
-    ? `<img class="job-logo" src="${_e(v.logo)}" alt="" loading="lazy"
-         onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
-    : '';
-  const logoPh = `<div class="job-logo-ph" style="${logo ? 'display:none' : ''}">🏢</div>`;
-
-  const date = v.publishedAt
-    ? new Date(v.publishedAt).toLocaleDateString('ru', { day:'numeric', month:'short' })
-    : '';
-
-  const sourceBadgeColor = v.source === 'sj'
-    ? 'rgba(20,184,166,0.2)' : 'rgba(244,63,94,0.15)';
-  const sourceBadgeText = v.source === 'sj'
-    ? 'rgba(20,184,166,1)' : 'rgba(244,100,100,1)';
-
-  return `<div class="job-card">
-    <div class="job-top">
-      ${logo}${logoPh}
-      <div style="min-width:0;flex:1">
-        <div class="job-company-name">${_e(v.company)}</div>
-      </div>
-      <span style="font-size:10px;padding:2px 8px;border-radius:10px;background:${sourceBadgeColor};color:${sourceBadgeText};white-space:nowrap;flex-shrink:0">${_e(v.sourceName)}</span>
-      ${date ? `<div class="job-date">${date}</div>` : ''}
-    </div>
-    <div class="job-title">${_e(v.title)}</div>
-    ${v.salary
-      ? `<div class="job-salary">${_e(v.salary)}</div>`
-      : `<div class="job-salary empty">Зарплата не указана</div>`}
-    <div class="job-tags">
-      ${v.city       ? `<span class="job-tag city">📍 ${_e(v.city)}</span>` : ''}
-      ${v.experience ? `<span class="job-tag exp">${_e(v.experience)}</span>` : ''}
-      ${v.schedule   ? `<span class="job-tag">${_e(v.schedule)}</span>` : ''}
-    </div>
-    ${v.snippet ? `<div class="job-snippet">${_e(v.snippet)}</div>` : ''}
-    <a class="job-link" href="${_e(v.url)}" target="_blank" rel="noopener noreferrer">
-      Открыть вакансию →
-    </a>
-  </div>`;
 }
 
 function _e(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
