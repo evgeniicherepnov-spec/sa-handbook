@@ -1,4 +1,4 @@
-const HH_RSS = 'https://hh.ru/search/vacancy/rss';
+const TAVILY_API = 'https://api.tavily.com/search';
 
 const ROLE_TEXT = {
   sa: 'системный аналитик',
@@ -6,65 +6,56 @@ const ROLE_TEXT = {
   fs: 'fullstack разработчик',
 };
 
-const HH_AREA = { all: '113', moscow: '1', spb: '2' };
+// Ключевые слова для проверки релевантности
+const ROLE_KEYWORDS = {
+  sa: ['системный аналитик', 'system analyst', 'sa '],
+  ba: ['бизнес-аналитик', 'business analyst', 'ba '],
+  fs: ['fullstack', 'full stack', 'full-stack'],
+};
 
-// Парсим один тег из XML
-function getTag(s, name) {
-  const m = s.match(new RegExp(`<${name}[^>]*>([^<]*)</${name}>`));
-  return m ? m[1].trim() : '';
+const CITY_TEXT = {
+  all:    'Россия',
+  moscow: 'Москва',
+  spb:    'Санкт-Петербург',
+  remote: 'удалённо',
+};
+
+const DOMAIN_LABEL = {
+  'hh.ru':           'HH.ru',
+  'superjob.ru':     'SuperJob',
+  'career.habr.com': 'Habr Career',
+  'avito.ru':        'Авито',
+};
+
+// Только URL конкретных вакансий, не страниц поиска
+function isVacancyUrl(url) {
+  return /hh\.ru\/vacancy\/\d+/.test(url)
+    || /career\.habr\.com\/vacancies\/\d+/.test(url)
+    || /superjob\.ru\/vakansii\/[^?#]+\d/.test(url)
+    || /avito\.ru\/.+\/vakansii\/.+_\d+/.test(url);
 }
 
-// Достаём CDATA содержимое
-function getCDATA(s, name) {
-  const m = s.match(new RegExp(`<${name}[^>]*><!\\[CDATA\\[([\\s\\S]*?)\\]\\]></${name}>`));
-  return m ? m[1] : '';
-}
-
-// Парсим description из HH.ru RSS
-// Формат: "Вакансия компании: NAME\nСоздана: DATE\nРегион: CITY\nПредполагаемый уровень...: SALARY\nОписание: ..."
-function parseDesc(html) {
-  const plain = html.replace(/<[^>]+>/g, '\n').replace(/&quot;/g,'"').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/\n+/g,'\n').trim();
-  const lines = plain.split('\n').map(l => l.trim()).filter(Boolean);
-
-  let company = '', city = '', salary = null, desc = '';
-
-  for (const line of lines) {
-    if (line.startsWith('Вакансия компании:')) {
-      company = line.replace('Вакансия компании:', '').trim();
-    } else if (line.startsWith('Регион:')) {
-      city = line.replace('Регион:', '').trim();
-    } else if (line.startsWith('Предполагаемый уровень')) {
-      const val = line.split(':').slice(1).join(':').trim();
-      if (val && !val.toLowerCase().includes('не указан')) salary = val;
-    } else if (!line.startsWith('Создана:') && company) {
-      desc += (desc ? ' ' : '') + line;
+function domainLabel(url) {
+  try {
+    const host = new URL(url).hostname.replace('www.', '');
+    for (const [d, label] of Object.entries(DOMAIN_LABEL)) {
+      if (host.includes(d)) return label;
     }
-  }
-
-  return { company, city, salary, desc: desc.slice(0, 250) };
+    return host;
+  } catch { return 'Вакансия'; }
 }
 
-function parseRSS(xml) {
-  const items = [];
-  const itemRe = /<item>([\s\S]*?)<\/item>/g;
-  let m;
-  while ((m = itemRe.exec(xml)) !== null) {
-    const block = m[1];
-    const title   = getCDATA(block, 'title') || getTag(block, 'title');
-    const link    = getTag(block, 'link') || getCDATA(block, 'link');
-    const descHtml = getCDATA(block, 'description') || getTag(block, 'description');
-    const { company, city, salary, desc } = parseDesc(descHtml);
+function extractSalary(text) {
+  const m = text.match(/(\d[\d\s]{2,})\s*[–—-]\s*(\d[\d\s]{2,})\s*(?:руб|₽)/i)
+    || text.match(/от\s*(\d[\d\s]{2,})\s*(?:руб|₽)/i)
+    || text.match(/до\s*(\d[\d\s]{2,})\s*(?:руб|₽)/i);
+  return m ? m[0].replace(/\s+/g, ' ').trim() : null;
+}
 
-    if (!title || !link) continue;
-
-    items.push({
-      title:   title.replace(/&quot;/g,'"').replace(/&amp;/g,'&').trim(),
-      url:     link.trim(),
-      company, city, salary,
-      snippet: desc,
-    });
-  }
-  return items;
+function isRelevant(title, role) {
+  const t = title.toLowerCase();
+  const keywords = ROLE_KEYWORDS[role] || [ROLE_TEXT[role]];
+  return keywords.some(kw => t.includes(kw.toLowerCase()));
 }
 
 export async function handler(event) {
@@ -80,33 +71,61 @@ export async function handler(event) {
     };
   }
 
+  const apiKey = process.env.TAVILY_API_KEY;
+  if (!apiKey) {
+    return {
+      statusCode: 500,
+      headers: { 'Access-Control-Allow-Origin': '*' },
+      body: JSON.stringify({ error: 'TAVILY_API_KEY not configured' }),
+    };
+  }
+
   const params = event.queryStringParameters || {};
   const role = params.role || 'sa';
   const city = params.city || 'all';
 
-  const text = ROLE_TEXT[role] || 'системный аналитик';
-  const area = HH_AREA[city] || '113';
+  const roleText = ROLE_TEXT[role] || 'системный аналитик';
+  const cityText = CITY_TEXT[city] || '';
 
-  const qs = new URLSearchParams({ text, area });
-  if (city === 'remote') qs.set('schedule', 'remote');
-
-  const url = `${HH_RSS}?${qs}`;
-  console.log('Fetching RSS:', url);
+  // Два параллельных запроса: HH.ru + остальные площадки
+  const queries = [
+    {
+      query: `"${roleText}" вакансия ${cityText} требования обязанности`,
+      domains: ['hh.ru'],
+    },
+    {
+      query: `"${roleText}" вакансия ${cityText}`,
+      domains: ['career.habr.com', 'superjob.ru'],
+    },
+  ];
 
   try {
-    const res = await fetch(url, {
-      headers: {
-        'Accept': 'application/rss+xml, application/xml, text/xml, */*',
-        'Accept-Language': 'ru-RU,ru;q=0.9',
-      },
-    });
+    const results = await Promise.all(queries.map(q =>
+      fetch(TAVILY_API, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          api_key:         apiKey,
+          query:           q.query,
+          search_depth:    'basic',
+          max_results:     10,
+          include_domains: q.domains,
+        }),
+      }).then(r => r.json()).catch(() => ({ results: [] }))
+    ));
 
-    console.log('RSS status:', res.status);
-    if (!res.ok) throw new Error(`HH.ru RSS ${res.status}`);
-    const xml = await res.text();
-    console.log('XML length:', xml.length, 'items found:', (xml.match(/<item>/g) || []).length);
+    const allResults = results.flatMap(r => r.results || []);
 
-    const items = parseRSS(xml);
+    const items = allResults
+      .filter(r => isVacancyUrl(r.url))
+      .filter(r => isRelevant(r.title, role))
+      .map(r => ({
+        title:   r.title,
+        url:     r.url,
+        source:  domainLabel(r.url),
+        salary:  extractSalary(r.content || ''),
+        snippet: (r.content || '').replace(/\s+/g, ' ').trim().slice(0, 280),
+      }));
 
     return {
       statusCode: 200,
@@ -119,7 +138,6 @@ export async function handler(event) {
     };
 
   } catch (err) {
-    console.error('Jobs RSS error:', err.message);
     return {
       statusCode: 500,
       headers: { 'Access-Control-Allow-Origin': '*' },

@@ -7843,16 +7843,16 @@ async function jobsLoad() {
       return;
     }
 
-    meta.textContent = `HH.ru · ${data.total} вакансий · обновлено только что`;
+    const sourceColors = { 'HH.ru':'rgba(244,63,94,0.15)', 'SuperJob':'rgba(60,130,255,0.15)', 'Habr Career':'rgba(255,130,60,0.15)', 'Авито':'rgba(60,200,100,0.15)' };
+    const sourceText   = { 'HH.ru':'#f87171', 'SuperJob':'#93c5fd', 'Habr Career':'#fdba74', 'Авито':'#6ee7b7' };
+    meta.textContent = `Найдено ${data.total} вакансий · HH.ru, SuperJob, Habr Career · обновлено только что`;
     grid.innerHTML = data.items.map(v => `
       <div class="job-card">
-        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-          <span style="font-size:11px;padding:2px 10px;border-radius:10px;background:rgba(244,63,94,0.15);color:#f87171;font-weight:600">HH.ru</span>
-          ${v.city ? `<span class="job-tag city">📍 ${_e(v.city)}</span>` : ''}
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:11px;padding:2px 10px;border-radius:10px;background:${sourceColors[v.source]||'rgba(139,92,246,0.15)'};color:${sourceText[v.source]||'#c4b5fd'};font-weight:600">${_e(v.source)}</span>
         </div>
         <div class="job-title">${_e(v.title)}</div>
-        ${v.company ? `<div class="job-company-name" style="font-size:13px;color:var(--text2)">${_e(v.company)}</div>` : ''}
-        ${v.salary  ? `<div class="job-salary">${_e(v.salary)}</div>` : '<div class="job-salary empty">Зарплата не указана</div>'}
+        ${v.salary ? `<div class="job-salary">${_e(v.salary)}</div>` : '<div class="job-salary empty">Зарплата не указана</div>'}
         ${v.snippet ? `<div class="job-snippet" style="margin-top:6px">${_e(v.snippet)}</div>` : ''}
         <a class="job-link" href="${_e(v.url)}" target="_blank" rel="noopener">Открыть вакансию →</a>
       </div>`).join('');
