@@ -1400,7 +1400,7 @@ select.fb-input option {
   <div class="nav-item" data-tab="templates" onclick="go('templates',this)"><div class="num">📄</div>Шаблоны документов</div>
   <div class="nav-item" data-tab="career" onclick="go('career',this)"><div class="num">🚀</div>Карьерный трек</div>
   <div class="nav-item" data-tab="resume" onclick="go('resume',this)"><div class="num">📝</div>Конструктор резюме</div>
-  <div class="nav-item" data-tab="jobs" onclick="go('jobs',this)"><div class="num">💼</div>Вакансии HH.ru</div>
+  <div class="nav-item" data-tab="jobs" onclick="go('jobs',this)"><div class="num">💼</div>Вакансии</div>
   
   <div class="sidebar-footer">Твой личный гайд для<br>идеальной работы 🚀</div>
 </aside>
@@ -5917,7 +5917,7 @@ ROI = (<span class="tmpl-field">[выгода]</span> − <span class="tmpl-fiel
 <div class="section-header">
   <div class="section-tag">Карьера · Рынок</div>
   <div class="section-title">Вакансии для аналитиков</div>
-  <div class="section-desc">Свежие вакансии с HH.ru обновляются автоматически. Ниже — прямые ссылки на поиск на других крупных площадках.</div>
+  <div class="section-desc">Свежие вакансии с HH.ru и SuperJob обновляются автоматически. Ниже — прямые ссылки на поиск на других крупных площадках.</div>
 </div>
 
 <!-- Фильтры -->
@@ -5955,8 +5955,8 @@ ROI = (<span class="tmpl-field">[выгода]</span> − <span class="tmpl-fiel
 <h2 style="margin-bottom:14px">Другие площадки</h2>
 <div class="jobs-platforms-grid" id="jobs-platform-links"></div>
 
-<!-- HH.ru результаты -->
-<h2 style="margin:28px 0 8px">Вакансии с HH.ru</h2>
+<!-- Результаты -->
+<h2 style="margin:28px 0 8px">Свежие вакансии</h2>
 <div id="jobs-meta" class="jobs-meta"></div>
 <div id="jobs-grid" class="jobs-grid">
   <div class="jobs-state">
@@ -7881,7 +7881,10 @@ async function jobsLoad(){
 
   try {
     const resp = await fetch(apiUrl);
-    if(!resp.ok) throw new Error('HTTP ' + resp.status);
+    if(!resp.ok){
+      const text = await resp.text().catch(() => '');
+      throw new Error(`HTTP ${resp.status}: ${text.slice(0,200)}`);
+    }
     const data = await resp.json();
 
     btn.disabled = false;
@@ -7909,7 +7912,7 @@ async function jobsLoad(){
     grid.innerHTML = `<div class="jobs-state">
       <div class="jobs-state-icon">⚠️</div>
       <div class="jobs-state-title">Не удалось загрузить</div>
-      <div class="jobs-state-sub">Убедись что сайт развёрнут на Netlify — локально вакансии не работают.</div>
+      <div class="jobs-state-sub">${e.message}</div>
     </div>`;
     console.error('Jobs API error:', e);
   }
