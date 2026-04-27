@@ -404,98 +404,6 @@ svg.diagram { width: 100%; border-radius: 16px; background: rgba(0,0,0,0.3); bor
 .cl-reset { font-size: 11.5px; color: var(--text3); cursor: pointer; text-decoration: underline; transition: color .15s; font-family: 'Golos Text', sans-serif; background: none; border: none; padding: 0; }
 .cl-reset:hover { color: var(--accent3); }
 
-/* ═══════════════════════════════════════
-   JOBS / VACANCIES — HH.RU
-═══════════════════════════════════════ */
-.jobs-filters {
-  background: var(--bg-glass); border: 1px solid var(--border);
-  border-radius: 16px; padding: 18px 20px; margin-bottom: 24px;
-  display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-end;
-}
-.jobs-filter-group { display: flex; flex-direction: column; gap: 7px; }
-.jobs-filter-label { font-size: 9.5px; letter-spacing: 2px; text-transform: uppercase; color: var(--text3); font-family: 'Unbounded', sans-serif; }
-.jobs-btn-row { display: flex; gap: 5px; flex-wrap: wrap; }
-.jobs-f-btn {
-  padding: 7px 13px; border-radius: 8px;
-  border: 1px solid var(--border); background: rgba(255,255,255,0.03);
-  color: var(--text2); font-size: 12px; font-family: 'Golos Text', sans-serif;
-  cursor: pointer; transition: all .2s;
-}
-.jobs-f-btn:hover { border-color: var(--border-highlight); color: var(--text); }
-.jobs-f-btn.active { border-color: var(--accent); background: rgba(139,92,246,0.15); color: #f4f4f5; font-weight: 600; }
-.jobs-load-btn {
-  padding: 10px 22px; border-radius: 10px;
-  background: linear-gradient(135deg, #8b5cf6, #14b8a6);
-  border: none; color: white; font-family: 'Golos Text', sans-serif;
-  font-size: 13.5px; font-weight: 600; cursor: pointer; transition: all .2s;
-  box-shadow: 0 4px 14px rgba(139,92,246,0.35); align-self: flex-end;
-}
-.jobs-load-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(139,92,246,0.45); }
-.jobs-load-btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
-.jobs-platforms-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 16px;
-  margin-bottom: 8px;
-}
-.jobs-plt-card {
-  display: flex; flex-direction: column; gap: 14px;
-  padding: 22px 22px 18px; border-radius: 18px; text-decoration: none;
-  border: 1px solid var(--border); background: var(--bg-glass);
-  transition: all .25s; color: var(--text); position: relative; overflow: hidden;
-}
-.jobs-plt-card::before { content:''; position:absolute; inset:0; opacity:0; transition:.25s; background: radial-gradient(ellipse at 30% 0%, var(--plt-color,rgba(139,92,246,.15)) 0%, transparent 70%); }
-.jobs-plt-card:hover { border-color: var(--border-highlight); transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,0.25); }
-.jobs-plt-card:hover::before { opacity:1; }
-.jobs-plt-top { display:flex; align-items:center; gap:12px; }
-.jobs-plt-icon { font-size: 28px; flex-shrink: 0; }
-.jobs-plt-info { min-width: 0; }
-.jobs-plt-name { font-size: 15px; font-weight: 700; color: var(--text); }
-.jobs-plt-domain { font-size: 11px; color: var(--text3); margin-top: 1px; }
-.jobs-plt-desc { font-size: 12.5px; color: var(--text2); line-height: 1.6; }
-.jobs-plt-btn {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 9px 16px; border-radius: 10px; font-size: 12.5px; font-weight: 600;
-  background: rgba(255,255,255,0.06); border: 1px solid var(--border);
-  color: var(--text); transition: all .2s; align-self: flex-start;
-}
-.jobs-plt-card:hover .jobs-plt-btn { background: rgba(255,255,255,0.1); border-color: var(--border-highlight); }
-.jobs-meta { font-size: 12px; color: var(--text3); margin-bottom: 16px; }
-.jobs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
-.job-card {
-  background: var(--bg-glass); border: 1px solid var(--border);
-  border-radius: 16px; padding: 20px;
-  display: flex; flex-direction: column; gap: 10px;
-  transition: all .25s ease;
-}
-.job-card:hover { border-color: var(--border-highlight); transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
-.job-top { display: flex; align-items: center; gap: 10px; }
-.job-logo { width: 36px; height: 36px; border-radius: 8px; object-fit: contain; background: rgba(255,255,255,0.06); border: 1px solid var(--border); flex-shrink: 0; }
-.job-logo-ph { width: 36px; height: 36px; border-radius: 8px; background: rgba(139,92,246,0.1); border: 1px solid rgba(139,92,246,0.2); display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
-.job-company-name { font-size: 12px; color: var(--text3); }
-.job-date { font-size: 11px; color: var(--text3); margin-left: auto; white-space: nowrap; }
-.job-title { font-size: 14.5px; font-weight: 600; color: var(--text); line-height: 1.4; }
-.job-salary { font-size: 14px; color: #10b981; font-weight: 600; }
-.job-salary.empty { color: var(--text3); font-weight: 400; font-size: 12.5px; font-style: italic; }
-.job-tags { display: flex; flex-wrap: wrap; gap: 5px; }
-.job-tag { font-size: 11px; padding: 3px 9px; border-radius: 10px; border: 1px solid var(--border); background: rgba(255,255,255,0.03); color: var(--text3); }
-.job-tag.exp  { border-color: rgba(245,158,11,0.3);  color: #fcd34d; background: rgba(245,158,11,0.06); }
-.job-tag.city { border-color: rgba(20,184,166,0.3);  color: #5de0c8; background: rgba(20,184,166,0.06); }
-.job-snippet { font-size: 12px; color: var(--text3); line-height: 1.65; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-.job-link {
-  display: block; text-align: center; margin-top: auto; padding: 10px;
-  border-radius: 10px; background: rgba(139,92,246,0.1);
-  border: 1px solid rgba(139,92,246,0.25); color: #c4b5fd;
-  font-size: 13px; text-decoration: none; transition: all .2s;
-}
-.job-link:hover { background: rgba(139,92,246,0.22); border-color: var(--accent); }
-.jobs-state { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; gap: 12px; text-align: center; grid-column: 1/-1; }
-.jobs-state-icon { font-size: 40px; }
-.jobs-state-title { font-size: 16px; font-weight: 600; color: var(--text); font-family: 'Unbounded', sans-serif; }
-.jobs-state-sub { font-size: 13px; color: var(--text3); max-width: 360px; line-height: 1.7; }
-.jobs-spinner { width: 36px; height: 36px; border-radius: 50%; border: 3px solid rgba(139,92,246,0.2); border-top-color: var(--accent); animation: spin .8s linear infinite; }
-@keyframes spin { to { transform: rotate(360deg); } }
-
 /* ══ TEMPLATES ══ */
 .tmpl-tabs { display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap; }
 .tmpl-tab {
@@ -1411,7 +1319,6 @@ select.fb-input option {
   <div class="nav-item" data-tab="templates" onclick="go('templates',this)"><div class="num">📄</div>Шаблоны документов</div>
   <div class="nav-item" data-tab="career" onclick="go('career',this)"><div class="num">🚀</div>Карьерный трек</div>
   <div class="nav-item" data-tab="resume" onclick="go('resume',this)"><div class="num">📝</div>Конструктор резюме</div>
-  <div class="nav-item" data-tab="jobs" onclick="go('jobs',this)"><div class="num">💼</div>Вакансии</div>
   
   <div class="sidebar-footer">Твой личный гайд для<br>идеальной работы 🚀</div>
 </aside>
@@ -5921,54 +5828,6 @@ ROI = (<span class="tmpl-field">[выгода]</span> − <span class="tmpl-fiel
 </div>
 </div>
 
-<!-- ══════════════════════════════
-     ВАКАНСИИ
-══════════════════════════════ -->
-<div class="section" id="tab-jobs">
-<div class="section-header">
-  <div class="section-tag">Карьера · Рынок</div>
-  <div class="section-title">Вакансии для аналитиков</div>
-  <div class="section-desc">Выбери роль и город — ссылки на всех площадках обновятся автоматически. Один клик — и ты уже на нужном поиске.</div>
-</div>
-
-<!-- Фильтры -->
-<div class="jobs-filters">
-  <div class="jobs-filter-group">
-    <div class="jobs-filter-label">Роль</div>
-    <div class="jobs-btn-row">
-      <button class="jobs-f-btn active" onclick="jobsFilter('role','sa',this)">Системный аналитик</button>
-      <button class="jobs-f-btn" onclick="jobsFilter('role','ba',this)">Бизнес-аналитик</button>
-      <button class="jobs-f-btn" onclick="jobsFilter('role','fs',this)">Fullstack</button>
-    </div>
-  </div>
-  <div class="jobs-filter-group">
-    <div class="jobs-filter-label">Город</div>
-    <div class="jobs-btn-row">
-      <button class="jobs-f-btn active" onclick="jobsFilter('city','all',this)">Вся Россия</button>
-      <button class="jobs-f-btn" onclick="jobsFilter('city','moscow',this)">Москва</button>
-      <button class="jobs-f-btn" onclick="jobsFilter('city','spb',this)">Санкт-Петербург</button>
-      <button class="jobs-f-btn" onclick="jobsFilter('city','remote',this)">Удалённо</button>
-    </div>
-  </div>
-</div>
-
-<!-- Площадки -->
-<div class="jobs-platforms-grid" id="jobs-platform-links"></div>
-
-<!-- Карточки вакансий -->
-<div style="display:flex;align-items:center;justify-content:space-between;margin:32px 0 12px">
-  <h2 style="margin:0">Свежие вакансии</h2>
-  <button class="jobs-load-btn" id="jobs-load-btn" onclick="jobsLoad()">↻ Обновить</button>
-</div>
-<div id="jobs-meta" class="jobs-meta"></div>
-<div id="jobs-grid" class="jobs-grid">
-  <div class="jobs-state">
-    <div class="jobs-state-icon">🔍</div>
-    <div class="jobs-state-title">Нажми «Обновить»</div>
-    <div class="jobs-state-sub">AI-поисковик найдёт свежие вакансии с HH.ru, SuperJob и Habr</div>
-  </div>
-</div>
-</div>
 
 </main>
 </div>
@@ -6175,9 +6034,7 @@ function go(tab,btn){
       if(!localStorage.getItem('sa_resume_v1')) rbApplyTemplate();
     }
   }
-  if(tab === 'jobs'){
-    _jobsUpdatePlatforms();
-  }
+
 }
 
 function showDiag(id,btn){
@@ -7788,153 +7645,6 @@ function aiRender(text){
     .split(/\n{2,}/).map(p => `<p>${p.replace(/\n/g,'<br>')}</p>`).join('');
 }
 
-/* ═══════════════════════════════════════
-   ВАКАНСИИ — ПРЯМЫЕ ССЫЛКИ
-═══════════════════════════════════════ */
-const JOBS_ROLE_TEXT = {
-  sa: 'системный аналитик',
-  ba: 'бизнес-аналитик',
-  pm: 'продакт менеджер',
-  fs: 'fullstack разработчик',
-};
-
-const JOBS_CITY_HH = { all: '', moscow: '&area=1', spb: '&area=2', remote: '&schedule=remote' };
-const JOBS_CITY_SJ = { all: '', moscow: '&town=4', spb: '&town=14', remote: '&place_of_work=2' };
-const JOBS_CITY_HABR = { all: '', moscow: '&locations[]=c_678', spb: '&locations[]=c_679', remote: '&type=remote' };
-const JOBS_CITY_AVITO = { all: 'rossiya', moscow: 'moskva', spb: 'sankt-peterburg', remote: 'rossiya' };
-
-let _jobsF = { role: 'sa', city: 'all' };
-
-function jobsFilter(type, value, btn) {
-  _jobsF[type] = value;
-  btn.closest('.jobs-btn-row')
-    .querySelectorAll('.jobs-f-btn')
-    .forEach(b => b.classList.toggle('active', b === btn));
-  _jobsUpdatePlatforms();
-}
-
-async function jobsLoad() {
-  const btn  = document.getElementById('jobs-load-btn');
-  const grid = document.getElementById('jobs-grid');
-  const meta = document.getElementById('jobs-meta');
-
-  btn.disabled = true;
-  btn.textContent = 'Ищу…';
-  meta.textContent = '';
-  grid.innerHTML = `<div class="jobs-state">
-    <div class="jobs-spinner"></div>
-    <div class="jobs-state-title">AI ищет вакансии</div>
-    <div class="jobs-state-sub">Обходим HH.ru, SuperJob, Habr Career…</div>
-  </div>`;
-
-  const { role, city } = _jobsF;
-  try {
-    const resp = await fetch(`/.netlify/functions/jobs?role=${role}&city=${city}`);
-    const data = await resp.json();
-    btn.disabled = false;
-    btn.textContent = '↻ Обновить';
-
-    if (!data.items?.length) {
-      grid.innerHTML = `<div class="jobs-state">
-        <div class="jobs-state-icon">🔍</div>
-        <div class="jobs-state-title">Ничего не найдено</div>
-        <div class="jobs-state-sub">Попробуй другую роль или город</div>
-      </div>`;
-      return;
-    }
-
-    const sourceColors = { 'HH.ru':'rgba(244,63,94,0.15)', 'SuperJob':'rgba(60,130,255,0.15)', 'Habr Career':'rgba(255,130,60,0.15)', 'Авито':'rgba(60,200,100,0.15)' };
-    const sourceText   = { 'HH.ru':'#f87171', 'SuperJob':'#93c5fd', 'Habr Career':'#fdba74', 'Авито':'#6ee7b7' };
-    meta.textContent = `Найдено ${data.total} вакансий · HH.ru, SuperJob, Habr Career · обновлено только что`;
-    grid.innerHTML = data.items.map(v => `
-      <div class="job-card">
-        <div style="display:flex;align-items:center;gap:8px">
-          <span style="font-size:11px;padding:2px 10px;border-radius:10px;background:${sourceColors[v.source]||'rgba(139,92,246,0.15)'};color:${sourceText[v.source]||'#c4b5fd'};font-weight:600">${_e(v.source)}</span>
-        </div>
-        <div class="job-title">${_e(v.title)}</div>
-        ${v.salary ? `<div class="job-salary">${_e(v.salary)}</div>` : '<div class="job-salary empty">Зарплата не указана</div>'}
-        ${v.snippet ? `<div class="job-snippet" style="margin-top:6px">${_e(v.snippet)}</div>` : ''}
-        <a class="job-link" href="${_e(v.url)}" target="_blank" rel="noopener">Открыть вакансию →</a>
-      </div>`).join('');
-  } catch(e) {
-    btn.disabled = false;
-    btn.textContent = '↻ Обновить';
-    grid.innerHTML = `<div class="jobs-state">
-      <div class="jobs-state-icon">⚠️</div>
-      <div class="jobs-state-title">Ошибка поиска</div>
-      <div class="jobs-state-sub">${e.message}</div>
-    </div>`;
-  }
-}
-
-function _jobsUpdatePlatforms() {
-  const el = document.getElementById('jobs-platform-links');
-  if (!el) return;
-
-  const role = _jobsF.role;
-  const city = _jobsF.city;
-  const text = JOBS_ROLE_TEXT[role] || 'системный аналитик';
-  const q = encodeURIComponent(text);
-
-  const hhCity   = JOBS_CITY_HH[city]   || '';
-  const sjCity   = JOBS_CITY_SJ[city]   || '';
-  const habrCity = JOBS_CITY_HABR[city] || '';
-  const avitoGeo = JOBS_CITY_AVITO[city] || 'rossiya';
-  const liLoc    = city === 'moscow' ? 'Moscow, Russia' : city === 'spb' ? 'Saint Petersburg, Russia' : 'Russia';
-
-  const platforms = [
-    {
-      icon: '🔴', name: 'HH.ru', domain: 'hh.ru',
-      desc: '№1 в России — миллионы вакансий, удобные фильтры, отклик в один клик',
-      color: 'rgba(255,60,60,0.12)',
-      url: `https://hh.ru/search/vacancy?text=${q}${hhCity}&order_by=publication_time`,
-    },
-    {
-      icon: '🔵', name: 'SuperJob', domain: 'superjob.ru',
-      desc: 'Вторая по размеру площадка, много IT и аналитических позиций',
-      color: 'rgba(60,130,255,0.12)',
-      url: `https://www.superjob.ru/vacancy/search/?keywords=${q}${sjCity}`,
-    },
-    {
-      icon: '🟠', name: 'Habr Career', domain: 'career.habr.com',
-      desc: 'Лучшая площадка для IT-специалистов, честные зарплаты, крутые компании',
-      color: 'rgba(255,130,60,0.12)',
-      url: `https://career.habr.com/vacancies?q=${q}${habrCity}&type=all`,
-    },
-    {
-      icon: '🟢', name: 'Авито Работа', domain: 'avito.ru',
-      desc: 'Растущая площадка, много региональных и удалённых вакансий',
-      color: 'rgba(60,200,100,0.12)',
-      url: `https://www.avito.ru/${avitoGeo}/vakansii?q=${q}`,
-    },
-    {
-      icon: '🔷', name: 'LinkedIn', domain: 'linkedin.com',
-      desc: 'Международные компании и удалёнка, сетевые связи с рынком',
-      color: 'rgba(60,130,255,0.12)',
-      url: `https://www.linkedin.com/jobs/search/?keywords=${encodeURIComponent(text)}&location=${encodeURIComponent(liLoc)}`,
-    },
-    {
-      icon: '🟣', name: 'Работа.ру', domain: 'rabota.ru',
-      desc: 'Широкий охват регионов России, удобный поиск по специальности',
-      color: 'rgba(160,60,255,0.12)',
-      url: `https://www.rabota.ru/vacancy?query=${q}`,
-    },
-  ];
-
-  el.innerHTML = platforms.map(p => `
-    <a class="jobs-plt-card" href="${p.url}" target="_blank" rel="noopener"
-       style="--plt-color:${p.color}">
-      <div class="jobs-plt-top">
-        <div class="jobs-plt-icon">${p.icon}</div>
-        <div class="jobs-plt-info">
-          <div class="jobs-plt-name">${p.name}</div>
-          <div class="jobs-plt-domain">${p.domain}</div>
-        </div>
-      </div>
-      <div class="jobs-plt-desc">${p.desc}</div>
-      <div class="jobs-plt-btn">Найти вакансии →</div>
-    </a>`).join('');
-}
 
 function _e(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 </script>
