@@ -133,19 +133,47 @@ body {
   font-size: 12px; color: var(--text2); background: var(--bg-glass); backdrop-filter: blur(10px);
 }
 
-.section { display: none; padding: 50px 60px; width: 100%; max-width: 1060px; box-sizing: border-box; align-self: flex-start; }
+.section { display: none; padding: 50px 64px; width: 100%; max-width: 1160px; box-sizing: border-box; align-self: flex-start; }
 .section.active { display: block; animation: fadeIn .4s cubic-bezier(0.16, 1, 0.3, 1); }
 .section.active#tab-trainer { display: flex; animation: fadeIn .4s cubic-bezier(0.16, 1, 0.3, 1); align-self: stretch; max-width: 100%; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 
-.section-header { margin-bottom: 40px; }
-.section-tag { font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase; font-family: 'Unbounded', sans-serif; color: var(--accent); margin-bottom: 12px; }
-.section-title { font-family: 'Unbounded', sans-serif; font-size: 28px; font-weight: 700; color: var(--text); margin-bottom: 12px; }
-.section-desc { color: var(--text2); font-size: 15.5px; line-height: 1.8; max-width: 680px; }
+.section-header {
+  margin-bottom: 44px;
+  padding: 32px 36px;
+  background: var(--bg-glass);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.section-header::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2), transparent);
+}
+.section-tag { font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase; font-family: 'Unbounded', sans-serif; color: var(--accent); margin-bottom: 12px; opacity: .8; }
+.section-title { font-family: 'Unbounded', sans-serif; font-size: 26px; font-weight: 700; color: var(--text); margin-bottom: 12px; }
+.section-desc { color: var(--text2); font-size: 15px; line-height: 1.8; max-width: 680px; }
 
-h2 { font-family: 'Unbounded', sans-serif; font-size: 18px; font-weight: 600; color: var(--text); margin: 48px 0 20px; }
-h3 { font-size: 15px; font-weight: 600; color: var(--text); margin: 24px 0 10px; letter-spacing: .3px; }
-p { font-size: 14.5px; color: var(--text2); margin-bottom: 16px; }
+h2 {
+  font-family: 'Unbounded', sans-serif; font-size: 16px; font-weight: 600;
+  color: var(--text); margin: 44px 0 18px;
+  display: flex; align-items: center; gap: 10px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+h2::before {
+  content: '';
+  display: inline-block; flex-shrink: 0;
+  width: 3px; height: 16px;
+  background: linear-gradient(to bottom, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+h3 { font-size: 14.5px; font-weight: 600; color: var(--text); margin: 24px 0 10px; letter-spacing: .3px; }
+p { font-size: 14.5px; color: var(--text2); margin-bottom: 16px; line-height: 1.75; }
 
 /* Modern Glass Cards */
 .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin: 20px 0; }
@@ -200,18 +228,29 @@ p { font-size: 14.5px; color: var(--text2); margin-bottom: 16px; }
   padding: 20px; font-family: 'JetBrains Mono', monospace; font-size: 13px; 
   line-height: 1.8; margin: 16px 0; overflow-x: auto; white-space: pre; color: #e4e4e7; 
 }
-.ex { 
-  border-left: 4px solid var(--accent); background: linear-gradient(90deg, rgba(139, 92, 246, 0.08), transparent); 
-  border-radius: 0 12px 12px 0; padding: 16px 20px; margin: 16px 0; 
+.ex {
+  border-left: 3px solid var(--accent);
+  background: linear-gradient(90deg, rgba(139,92,246,0.07) 0%, rgba(139,92,246,0.02) 60%, transparent 100%);
+  border-radius: 0 14px 14px 0; padding: 18px 22px; margin: 20px 0;
+  border-top: 1px solid rgba(139,92,246,0.1);
+  border-bottom: 1px solid rgba(139,92,246,0.1);
+  border-right: 1px solid rgba(139,92,246,0.06);
 }
-.ex-label { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; font-family: 'Unbounded', sans-serif; color: var(--accent); margin-bottom: 8px; }
-.ex p { margin-bottom: 4px; font-size: 14px; }
-.ex-green { border-left-color: var(--accent2); background: linear-gradient(90deg, var(--accent2-glow), transparent); }
+.ex-label { font-size: 9.5px; letter-spacing: 2px; text-transform: uppercase; font-family: 'Unbounded', sans-serif; color: var(--accent); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+.ex-label::before { content: ''; display:inline-block; width:6px; height:6px; border-radius:50%; background:var(--accent); flex-shrink:0; }
+.ex p { margin-bottom: 6px; font-size: 14px; }
+.ex-green { border-left-color: var(--accent2); background: linear-gradient(90deg, rgba(20,184,166,0.07) 0%, rgba(20,184,166,0.02) 60%, transparent 100%); border-top-color: rgba(20,184,166,0.12); border-bottom-color: rgba(20,184,166,0.12); border-right-color: rgba(20,184,166,0.06); }
 .ex-green .ex-label { color: var(--accent2); }
-.ex-red { border-left-color: var(--accent3); background: linear-gradient(90deg, rgba(244, 63, 94, 0.08), transparent); }
+.ex-green .ex-label::before { background: var(--accent2); }
+.ex-red { border-left-color: var(--accent3); background: linear-gradient(90deg, rgba(244,63,94,0.07) 0%, rgba(244,63,94,0.02) 60%, transparent 100%); border-top-color: rgba(244,63,94,0.12); border-bottom-color: rgba(244,63,94,0.12); border-right-color: rgba(244,63,94,0.06); }
 .ex-red .ex-label { color: var(--accent3); }
-.ex-yellow { border-left-color: var(--accent4); background: linear-gradient(90deg, rgba(245, 158, 11, 0.08), transparent); }
+.ex-red .ex-label::before { background: var(--accent3); }
+.ex-yellow { border-left-color: var(--accent4); background: linear-gradient(90deg, rgba(245,158,11,0.07) 0%, rgba(245,158,11,0.02) 60%, transparent 100%); border-top-color: rgba(245,158,11,0.12); border-bottom-color: rgba(245,158,11,0.12); border-right-color: rgba(245,158,11,0.06); }
 .ex-yellow .ex-label { color: var(--accent4); }
+.ex-yellow .ex-label::before { background: var(--accent4); }
+.ex-purple { border-left-color: var(--accent); background: linear-gradient(90deg, rgba(139,92,246,0.1) 0%, rgba(139,92,246,0.03) 60%, transparent 100%); border-top-color: rgba(139,92,246,0.15); border-bottom-color: rgba(139,92,246,0.15); border-right-color: rgba(139,92,246,0.08); }
+.ex-purple .ex-label { color: var(--accent); }
+.ex-purple .ex-label::before { background: var(--accent); }
 
 /* Mac-style Code Blocks */
 .mac-window { background: #0b0c10; border: 1px solid var(--border); border-radius: 12px; margin: 20px 0; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
@@ -222,9 +261,21 @@ p { font-size: 14.5px; color: var(--text2); margin-bottom: 16px; }
 .code-content { padding: 20px; font-family: 'JetBrains Mono', monospace; font-size: 13.5px; line-height: 1.8; overflow-x: auto; white-space: pre; color: #abb2bf; }
 
 /* Tables */
-table { width: 100%; border-collapse: separate; border-spacing: 0; margin: 20px 0; font-size: 13.5px; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
-th { padding: 14px 16px; text-align: left; background: rgba(255,255,255,0.03); color: var(--text); font-size: 12px; letter-spacing: .5px; font-weight: 600; border-bottom: 1px solid var(--border); }
-td { padding: 14px 16px; border-bottom: 1px solid var(--border); color: var(--text2); }
+table { width: 100%; border-collapse: separate; border-spacing: 0; margin: 20px 0; font-size: 13.5px; border-radius: 14px; overflow: hidden; border: 1px solid var(--border); }
+th {
+  padding: 13px 18px; text-align: left;
+  background: rgba(139,92,246,0.08);
+  color: var(--accent); font-size: 10.5px;
+  font-family: 'Unbounded', sans-serif;
+  letter-spacing: 1px; font-weight: 600;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--border);
+}
+td { padding: 13px 18px; border-bottom: 1px solid rgba(255,255,255,0.04); color: var(--text2); vertical-align: top; }
+tr:last-child td { border-bottom: none; }
+tr:nth-child(even) td { background: rgba(255,255,255,0.015); }
+tbody tr { transition: background .15s; }
+tbody tr:hover td { background: rgba(255,255,255,0.04); color: var(--text); }
 tr:last-child td { border-bottom: none; }
 tr:hover td { background: var(--bg-glass-hover); }
 
