@@ -1444,6 +1444,8 @@ select.fb-input option {
       <div class="nav-item" data-tab="arch" onclick="go('arch',this)"><div class="num">13</div>Архитектура систем</div>
       <div class="nav-item" data-tab="patterns" onclick="go('patterns',this)"><div class="num">+</div>Паттерны микросервисов</div>
       <div class="nav-item" data-tab="api" onclick="go('api',this)"><div class="num">14</div>REST API и OpenAPI</div>
+      <div class="nav-item" data-tab="graphql-grpc" onclick="go('graphql-grpc',this)"><div class="num">+</div>GraphQL и gRPC</div>
+      <div class="nav-item" data-tab="yaml" onclick="go('yaml',this)"><div class="num">+</div>YAML для СА</div>
       <div class="nav-item" data-tab="brokers" onclick="go('brokers',this)"><div class="num">15</div>Брокеры сообщений</div>
       <div class="nav-item" data-tab="security" onclick="go('security',this)"><div class="num">+</div>Безопасность (Auth)</div>
       <div class="nav-item" data-tab="infra" onclick="go('infra',this)"><div class="num">+</div>Кэш и Логирование</div>
@@ -4635,6 +4637,240 @@ OrderService слушает → отменяет заказ ← компенса
   <li><span class="notation-symbol">GraphQL</span> Один эндпоинт. Фронтенд сам запрашивает, какие поля ему нужны.</li>
   <li><span class="notation-symbol">Webhooks</span> Обратный вызов. Сервер сам шлет POST клиенту, когда произошло событие.</li>
 </ul>
+</div>
+
+<div class="section" id="tab-graphql-grpc">
+<div class="section-header">
+  <div class="section-tag">Раздел 12.5 · Интеграции</div>
+  <div class="section-title">GraphQL и gRPC</div>
+  <div class="section-desc">Два современных протокола которые активно вытесняют REST в определённых задачах. СА должен понимать когда и зачем их применяют.</div>
+</div>
+
+<h2>Почему не только REST</h2>
+<div class="ex ex-purple">
+  <div class="ex-label">Ограничения REST</div>
+  <p>REST отлично работает для простых CRUD-операций. Но у него есть проблемы: <strong>overfetching</strong> — клиент получает больше данных чем нужно; <strong>underfetching</strong> — нужно делать несколько запросов чтобы собрать нужные данные; <strong>версионирование API</strong> — сложно менять схему без поломки клиентов. GraphQL и gRPC решают эти проблемы каждый по-своему.</p>
+</div>
+
+<h2 style="margin-top:28px">GraphQL</h2>
+<p>GraphQL — язык запросов для API, разработанный Facebook в 2015. Клиент сам описывает какие данные ему нужны — и получает ровно их, не больше и не меньше.</p>
+
+<div class="compare-grid">
+  <div class="compare-card">
+    <div class="compare-label c-purple">Как работает GraphQL</div>
+    <ul class="sdlc-list" style="margin-top:12px">
+      <li>Один endpoint: <code style="background:rgba(255,255,255,0.06);padding:1px 6px;border-radius:4px">/graphql</code></li>
+      <li>Клиент пишет <strong>запрос (query)</strong> с нужными полями</li>
+      <li>Сервер возвращает <strong>ровно те поля</strong> которые запросили</li>
+      <li>Можно запросить данные из нескольких «таблиц» за один запрос</li>
+      <li>Есть <strong>mutations</strong> (изменение данных) и <strong>subscriptions</strong> (real-time)</li>
+    </ul>
+  </div>
+  <div class="compare-card">
+    <div class="compare-label c-teal">Когда применяется</div>
+    <ul class="sdlc-list" style="margin-top:12px">
+      <li>Мобильные приложения — нужно минимизировать трафик</li>
+      <li>Сложные продукты с гибкими экранами (разные клиенты — разные данные)</li>
+      <li>BFF (Backend For Frontend) паттерн</li>
+      <li>Когда несколько команд работают с одним API</li>
+      <li>Примеры: GitHub API v4, Shopify, Facebook</li>
+    </ul>
+  </div>
+</div>
+
+<div class="ex ex-green" style="margin-top:16px">
+  <div class="ex-label">Пример GraphQL запроса vs REST</div>
+  <p><strong>REST (3 запроса):</strong> GET /users/42 → GET /users/42/orders → GET /orders/7/items</p>
+  <p style="margin-top:6px"><strong>GraphQL (1 запрос):</strong></p>
+  <pre style="background:rgba(0,0,0,0.3);border-radius:10px;padding:14px;font-size:12px;color:#a3e635;overflow-x:auto;margin-top:6px">query {
+  user(id: 42) {
+    name
+    email
+    orders(last: 5) {
+      id
+      total
+      items { name quantity }
+    }
+  }
+}</pre>
+</div>
+
+<h2 style="margin-top:32px">gRPC</h2>
+<p>gRPC — фреймворк удалённого вызова процедур от Google (2016). Использует <strong>Protocol Buffers (protobuf)</strong> для сериализации данных вместо JSON. Работает поверх HTTP/2.</p>
+
+<div class="compare-grid">
+  <div class="compare-card">
+    <div class="compare-label c-yellow">Как работает gRPC</div>
+    <ul class="sdlc-list" style="margin-top:12px">
+      <li>Контракт описывается в <strong>.proto файле</strong> (не JSON, не YAML)</li>
+      <li>Данные передаются в <strong>бинарном формате</strong> — быстрее и компактнее JSON</li>
+      <li>Поддерживает <strong>streaming</strong> в обе стороны</li>
+      <li>Типизация — ошибки типов находятся на этапе компиляции</li>
+      <li>Из .proto автогенерируются клиенты на любом языке</li>
+    </ul>
+  </div>
+  <div class="compare-card">
+    <div class="compare-label c-teal">Когда применяется</div>
+    <ul class="sdlc-list" style="margin-top:12px">
+      <li>Коммуникация <strong>между микросервисами</strong> внутри системы</li>
+      <li>Высоконагруженные сервисы где важна скорость</li>
+      <li>Streaming данных (чат, телеметрия, видео)</li>
+      <li>Внутренние API (не публичные)</li>
+      <li>Примеры: внутренние сервисы Google, Uber, Netflix</li>
+    </ul>
+  </div>
+</div>
+
+<div class="ex ex-yellow" style="margin-top:16px">
+  <div class="ex-label">Пример .proto файла</div>
+  <pre style="background:rgba(0,0,0,0.3);border-radius:10px;padding:14px;font-size:12px;color:#fcd34d;overflow-x:auto;margin-top:6px">syntax = "proto3";
+
+service OrderService {
+  rpc GetOrder (OrderRequest) returns (OrderResponse);
+  rpc ListOrders (ListRequest) returns (stream OrderResponse);
+}
+
+message OrderRequest { int32 order_id = 1; }
+message OrderResponse {
+  int32 id = 1;
+  string status = 2;
+  double total = 3;
+}</pre>
+</div>
+
+<h2 style="margin-top:32px">Сравнение: REST vs GraphQL vs gRPC</h2>
+<table>
+  <tr><th>Критерий</th><th>REST</th><th>GraphQL</th><th>gRPC</th></tr>
+  <tr><td><strong>Формат данных</strong></td><td>JSON</td><td>JSON</td><td>Protobuf (бинарный)</td></tr>
+  <tr><td><strong>Протокол</strong></td><td>HTTP/1.1+</td><td>HTTP/1.1+</td><td>HTTP/2</td></tr>
+  <tr><td><strong>Типизация</strong></td><td>Нет (OpenAPI опционально)</td><td>Строгая схема</td><td>Строгая (.proto)</td></tr>
+  <tr><td><strong>Скорость</strong></td><td>Средняя</td><td>Средняя</td><td>Высокая</td></tr>
+  <tr><td><strong>Гибкость запросов</strong></td><td>Фиксированные endpoints</td><td>Клиент выбирает поля</td><td>Фиксированные методы</td></tr>
+  <tr><td><strong>Браузер</strong></td><td>✅ Нативно</td><td>✅ Нативно</td><td>❌ Нужен grpc-web</td></tr>
+  <tr><td><strong>Streaming</strong></td><td>❌ (WebSocket отдельно)</td><td>✅ Subscriptions</td><td>✅ Встроенный</td></tr>
+  <tr><td><strong>Где использовать</strong></td><td>Публичные API, CRUD</td><td>Мобайл, сложные продукты</td><td>Внутренние сервисы</td></tr>
+</table>
+
+<div class="ex ex-purple" style="margin-top:24px">
+  <div class="ex-label">Что СА нужно знать на практике</div>
+  <p>На собеседовании достаточно знать: <strong>GraphQL</strong> — когда клиент хочет гибко запрашивать данные; <strong>gRPC</strong> — когда микросервисы общаются между собой и важна скорость. В ТЗ и архитектурных решениях вы фиксируете выбор протокола и его обоснование — но детали реализации остаются за разработчиками.</p>
+</div>
+
+</div>
+
+<div class="section" id="tab-yaml">
+<div class="section-header">
+  <div class="section-tag">Интеграции · Форматы</div>
+  <div class="section-title">YAML для системного аналитика</div>
+  <div class="section-desc">YAML — формат представления данных который СА встречает в OpenAPI спецификациях, конфигах CI/CD и документации к API. Читать и понимать YAML обязательно.</div>
+</div>
+
+<div class="ex ex-purple">
+  <div class="ex-label">Зачем СА знать YAML</div>
+  <p>OpenAPI / Swagger спецификации пишутся на YAML или JSON. Когда разработчик показывает вам swagger.yaml и говорит «вот контракт API» — вы должны понять что там написано, найти ошибку или дополнить. Без понимания YAML вы работаете с API вслепую.</p>
+</div>
+
+<h2>Базовый синтаксис</h2>
+<p>YAML расшифровывается как «YAML Ain't Markup Language». Главное правило — <strong>отступы вместо скобок</strong>, 2 пробела на уровень.</p>
+
+<table>
+  <tr><th>Конструкция</th><th>YAML</th><th>Аналог в JSON</th></tr>
+  <tr><td><strong>Строка</strong></td><td><code style="color:#a3e635">name: Иван Петров</code></td><td><code style="color:#a3e635">"name": "Иван Петров"</code></td></tr>
+  <tr><td><strong>Число</strong></td><td><code style="color:#a3e635">age: 34</code></td><td><code style="color:#a3e635">"age": 34</code></td></tr>
+  <tr><td><strong>Булево</strong></td><td><code style="color:#a3e635">active: true</code></td><td><code style="color:#a3e635">"active": true</code></td></tr>
+  <tr><td><strong>Null</strong></td><td><code style="color:#a3e635">phone: null</code></td><td><code style="color:#a3e635">"phone": null</code></td></tr>
+  <tr><td><strong>Список</strong></td><td><code style="color:#a3e635">- item1<br>- item2</code></td><td><code style="color:#a3e635">["item1", "item2"]</code></td></tr>
+  <tr><td><strong>Объект</strong></td><td><code style="color:#a3e635">user:<br>&nbsp;&nbsp;name: Иван</code></td><td><code style="color:#a3e635">{"user": {"name": "Иван"}}</code></td></tr>
+  <tr><td><strong>Комментарий</strong></td><td><code style="color:#71717a"># это комментарий</code></td><td>— (нет)</td></tr>
+</table>
+
+<h2 style="margin-top:28px">Пример: OpenAPI спецификация на YAML</h2>
+<p>Именно так выглядит Swagger файл который описывает REST API. СА создаёт такой файл чтобы задокументировать контракт:</p>
+
+<pre style="background:rgba(0,0,0,0.3);border-radius:12px;padding:20px;font-size:12.5px;color:#e4e4e7;overflow-x:auto;line-height:1.7">openapi: 3.0.0
+info:
+  title: Orders API
+  version: 1.0.0
+
+paths:
+  /orders:
+    get:
+      summary: Получить список заказов
+      parameters:
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [new, processing, done]
+      responses:
+        '200':
+          description: Список заказов
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+
+  /orders/{id}:
+    get:
+      summary: Получить заказ по ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Заказ найден
+        '404':
+          description: Заказ не найден
+
+components:
+  schemas:
+    Order:
+      type: object
+      required: [id, status, total]
+      properties:
+        id:
+          type: integer
+          example: 42
+        status:
+          type: string
+          enum: [new, processing, done]
+        total:
+          type: number
+          format: float
+          example: 1250.50
+        createdAt:
+          type: string
+          format: date-time</pre>
+
+<div class="hbox" style="margin-top:4px">
+  <div class="ex-label" style="color:var(--accent3)">Что означают ключевые поля</div>
+  <table style="margin-top:12px">
+    <tr><th>Поле</th><th>Что означает</th></tr>
+    <tr><td><code>paths</code></td><td>Все эндпоинты API — URL и методы (GET, POST, PUT, DELETE)</td></tr>
+    <tr><td><code>parameters</code></td><td>Параметры запроса: in: path (в URL), in: query (после ?), in: header</td></tr>
+    <tr><td><code>required</code></td><td>true — параметр обязателен, false — опциональный</td></tr>
+    <tr><td><code>schema / type</code></td><td>Тип данных: string, integer, number, boolean, array, object</td></tr>
+    <tr><td><code>enum</code></td><td>Допустимые значения — только из этого списка</td></tr>
+    <tr><td><code>$ref</code></td><td>Ссылка на переиспользуемую схему из components</td></tr>
+    <tr><td><code>responses</code></td><td>Возможные HTTP-ответы с кодами (200, 404, 500...)</td></tr>
+    <tr><td><code>example</code></td><td>Пример значения — отображается в Swagger UI</td></tr>
+  </table>
+</div>
+
+<div class="ex ex-yellow" style="margin-top:20px">
+  <div class="ex-label">Частые ошибки в YAML</div>
+  <p>⚠️ <strong>Табуляция вместо пробелов</strong> — YAML не принимает Tab, только пробелы<br>
+  ⚠️ <strong>Неправильные отступы</strong> — каждый уровень ровно 2 пробела<br>
+  ⚠️ <strong>Пробел после двоеточия</strong> — <code>key: value</code> (не <code>key:value</code>)<br>
+  ⚠️ <strong>Кавычки не обязательны</strong> для строк, но нужны если строка начинается с : или содержит спецсимволы</p>
+</div>
+
 </div>
 
 <div class="section" id="tab-brokers">
