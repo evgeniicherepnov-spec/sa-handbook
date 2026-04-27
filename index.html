@@ -432,6 +432,56 @@ svg.diagram { width: 100%; border-radius: 16px; background: rgba(0,0,0,0.3); bor
 .tmpl-field { color:#f59e0b; }
 .tmpl-comment { color:#4b5563; font-style:italic; }
 
+/* ══ WORK MAP ══ */
+.wm-cases { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:36px; }
+.wm-case-btn {
+  padding:12px 22px; border-radius:14px; border:1px solid var(--border);
+  background:var(--bg-glass); color:var(--text2); font-size:13.5px;
+  font-family:'Golos Text',sans-serif; font-weight:600; cursor:pointer;
+  transition:all .25s; display:flex; align-items:center; gap:10px;
+}
+.wm-case-btn:hover { border-color:var(--border-highlight); color:var(--text); transform:translateY(-1px); }
+.wm-case-btn.active { border-color:var(--accent); background:rgba(139,92,246,0.15); color:#f4f4f5; box-shadow:0 4px 20px rgba(139,92,246,0.25); }
+.wm-case-icon { font-size:20px; }
+.wm-timeline { position:relative; padding-left:32px; }
+.wm-timeline::before {
+  content:''; position:absolute; left:15px; top:0; bottom:0; width:2px;
+  background:linear-gradient(to bottom, var(--accent), #14b8a6, transparent);
+  border-radius:2px;
+}
+.wm-stage {
+  position:relative; margin-bottom:28px;
+  background:var(--bg-glass); border:1px solid var(--border);
+  border-radius:20px; padding:24px 26px; transition:all .3s;
+  animation: wmFadeIn .4s ease both;
+}
+.wm-stage:hover { border-color:var(--border-highlight); transform:translateX(4px); box-shadow:0 8px 30px rgba(0,0,0,0.2); }
+@keyframes wmFadeIn { from { opacity:0; transform:translateX(-12px); } to { opacity:1; transform:translateX(0); } }
+.wm-stage::before {
+  content:''; position:absolute; left:-25px; top:28px;
+  width:12px; height:12px; border-radius:50%;
+  background:var(--accent); border:2px solid var(--bg);
+  box-shadow:0 0 0 3px rgba(139,92,246,0.3);
+}
+.wm-stage-head { display:flex; align-items:center; gap:14px; margin-bottom:14px; }
+.wm-stage-num { font-size:11px; font-family:'Unbounded',sans-serif; color:var(--accent); letter-spacing:1px; }
+.wm-stage-name { font-size:17px; font-weight:700; color:var(--text); }
+.wm-stage-desc { font-size:13.5px; color:var(--text2); line-height:1.7; margin-bottom:16px; }
+.wm-chips-row { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:10px; }
+.wm-chip-label { font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--text3); font-family:'Unbounded',sans-serif; margin-bottom:6px; margin-top:4px; }
+.wm-chip {
+  padding:5px 12px; border-radius:20px; font-size:12px; font-weight:500;
+  border:1px solid; white-space:nowrap;
+}
+.wm-chip.tool { border-color:rgba(139,92,246,0.35); background:rgba(139,92,246,0.1); color:#c4b5fd; }
+.wm-chip.artifact { border-color:rgba(20,184,166,0.35); background:rgba(20,184,166,0.1); color:#5eead4; }
+.wm-chip.method { border-color:rgba(245,158,11,0.35); background:rgba(245,158,11,0.1); color:#fcd34d; }
+.wm-stage-result {
+  margin-top:14px; padding:12px 16px; border-radius:12px;
+  background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.2);
+  font-size:12.5px; color:#6ee7b7; display:flex; align-items:center; gap:8px;
+}
+
 /* ══ CAREER TRACK ══ */
 .career-track { position:relative; padding:0 0 0 36px; margin:20px 0; }
 .career-track::before {
@@ -1319,7 +1369,8 @@ select.fb-input option {
   <div class="nav-item" data-tab="templates" onclick="go('templates',this)"><div class="num">📄</div>Шаблоны документов</div>
   <div class="nav-item" data-tab="career" onclick="go('career',this)"><div class="num">🚀</div>Карьерный трек</div>
   <div class="nav-item" data-tab="resume" onclick="go('resume',this)"><div class="num">📝</div>Конструктор резюме</div>
-  
+  <div class="nav-item" data-tab="workmap" onclick="go('workmap',this)"><div class="num">🗺</div>Карта работы СА</div>
+
   <div class="sidebar-footer">Твой личный гайд для<br>идеальной работы 🚀</div>
 </aside>
 
@@ -5743,6 +5794,34 @@ ROI = (<span class="tmpl-field">[выгода]</span> − <span class="tmpl-fiel
 </div>
 
 <!-- ══════════════════════════════════════════════
+     КАРТА РАБОТЫ СА
+══════════════════════════════════════════════ -->
+<div class="section" id="tab-workmap">
+<div class="section-header">
+  <div class="section-tag">Практика · Кейсы</div>
+  <div class="section-title">Карта работы системного аналитика</div>
+  <div class="section-desc">Выбери кейс — и увидишь весь путь: каждый этап, инструменты, методы и артефакты которые создаёт СА.</div>
+</div>
+
+<div class="wm-cases">
+  <button class="wm-case-btn active" onclick="wmSelect('product',this)">
+    <span class="wm-case-icon">🚀</span>
+    <span>Разработка нового продукта</span>
+  </button>
+  <button class="wm-case-btn" onclick="wmSelect('integration',this)">
+    <span class="wm-case-icon">🔗</span>
+    <span>Интеграция систем</span>
+  </button>
+  <button class="wm-case-btn" onclick="wmSelect('automation',this)">
+    <span class="wm-case-icon">⚙️</span>
+    <span>Автоматизация процесса</span>
+  </button>
+</div>
+
+<div class="wm-timeline" id="wm-timeline"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════
      RESUME BUILDER
 ══════════════════════════════════════════════ -->
 <div class="section" id="tab-resume">
@@ -6034,6 +6113,7 @@ function go(tab,btn){
   document.getElementById('ai-btn').style.display      = isTrainer ? 'none' : '';
   document.getElementById('feedback-btn').style.display = isTrainer ? 'none' : '';
   if(isTrainer){ closeAI(); }
+  if(tab === 'workmap'){ wmRender(); }
   if(tab === 'resume' && document.getElementById('rb-exp-list')){
     if(!document.getElementById('rb-exp-list').dataset.init){
       document.getElementById('rb-exp-list').dataset.init = '1';
@@ -7654,6 +7734,214 @@ function aiRender(text){
 
 
 function _e(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+/* ══ КАРТА РАБОТЫ СА ══ */
+const WM_CASES = {
+  product: [
+    {
+      name: 'Инициация проекта',
+      desc: 'СА входит в проект: изучает бизнес-контекст, знакомится со стейкхолдерами, фиксирует первичное понимание целей и ограничений.',
+      methods: ['Kick-off встреча', 'Интервью с заказчиком', '5W1H анализ'],
+      tools: ['Miro', 'Notion', 'Google Meet'],
+      artifacts: ['Project Brief', 'Список стейкхолдеров', 'Глоссарий'],
+      result: 'Понимание зачем нужна система и кто принимает решения',
+    },
+    {
+      name: 'Исследование предметной области',
+      desc: 'Глубокое погружение в домен: изучение текущих процессов, болей пользователей, конкурентов и рыночного контекста.',
+      methods: ['Интервью с пользователями', 'Наблюдение (shadowing)', 'Конкурентный анализ', 'Бенчмаркинг'],
+      tools: ['Typeform', 'Miro', 'FigJam', 'Notion'],
+      artifacts: ['User Research Report', 'Персоны пользователей', 'Customer Journey Map'],
+      result: 'Чёткое понимание проблемы которую решает продукт',
+    },
+    {
+      name: 'Сбор и структурирование требований',
+      desc: 'Перевод потребностей бизнеса и пользователей в структурированные требования. Расстановка приоритетов.',
+      methods: ['User Story Mapping', 'MoSCoW', 'Impact Mapping', 'Brainstorming'],
+      tools: ['Jira', 'Confluence', 'Miro'],
+      artifacts: ['Product Backlog', 'User Stories с AC', 'Use Case диаграмма', 'Контекстная диаграмма'],
+      result: 'Полный согласованный список требований с приоритетами',
+    },
+    {
+      name: 'Проектирование архитектуры и данных',
+      desc: 'Проектирование структуры системы: компоненты, интеграции, модель данных, API-контракты.',
+      methods: ['C4 Model', 'ERD', 'Sequence Diagram', 'Domain Modeling'],
+      tools: ['Draw.io', 'Lucidchart', 'dbdiagram.io', 'Swagger Editor'],
+      artifacts: ['C4 диаграммы', 'ERD', 'Sequence Diagrams', 'Черновик API spec'],
+      result: 'Понятная архитектура системы согласованная с разработкой',
+    },
+    {
+      name: 'Написание ТЗ / SRS',
+      desc: 'Оформление всех требований в финальный документ. Функциональные, нефункциональные требования, макеты, ограничения.',
+      methods: ['IEEE 830 / ГОСТ 34', 'Шаблон SRS', 'Peer Review'],
+      tools: ['Confluence', 'Google Docs', 'Notion'],
+      artifacts: ['SRS / ТЗ', 'NFR документ', 'Acceptance Criteria', 'OpenAPI Spec'],
+      result: 'Подписанное ТЗ — точка отсчёта для разработки',
+    },
+    {
+      name: 'Поддержка разработки',
+      desc: 'СА остаётся в команде: отвечает на вопросы разработчиков, управляет изменениями, уточняет требования в процессе.',
+      methods: ['Grooming / Refinement', 'Change Management', 'Sprint Review'],
+      tools: ['Jira', 'Confluence', 'Slack', 'Figma'],
+      artifacts: ['Change Requests', 'Уточнения к US', 'Обновлённая документация'],
+      result: 'Команда разрабатывает именно то что нужно бизнесу',
+    },
+    {
+      name: 'Тестирование и приёмка',
+      desc: 'Проверка что система реализована согласно требованиям. Участие в UAT вместе с заказчиком.',
+      methods: ['UAT (User Acceptance Testing)', 'Smoke Testing', 'Регрессионное тестирование'],
+      tools: ['TestRail', 'Jira', 'Postman', 'Excel'],
+      artifacts: ['Test Plan', 'Чек-лист UAT', 'Баг-репорты', 'Акт приёмки'],
+      result: 'Система принята заказчиком и готова к запуску',
+    },
+  ],
+
+  integration: [
+    {
+      name: 'Анализ текущих систем',
+      desc: 'Изучение обеих систем которые нужно соединить: их API, форматы данных, ограничения, владельцы.',
+      methods: ['Reverse Engineering', 'Интервью с разработчиками', 'Анализ документации'],
+      tools: ['Postman', 'Swagger UI', 'Confluence', 'Excel'],
+      artifacts: ['Карта существующих API', 'Описание форматов данных', 'Список ограничений'],
+      result: 'Полная картина обеих систем и их возможностей',
+    },
+    {
+      name: 'Определение точек интеграции',
+      desc: 'Какие данные, когда и в каком направлении должны передаваться между системами.',
+      methods: ['Event Storming', 'Контекстная диаграмма', 'Data Flow анализ'],
+      tools: ['Miro', 'Draw.io', 'Lucidchart'],
+      artifacts: ['Integration Map', 'Контекстная диаграмма', 'DFD Level 0-1'],
+      result: 'Чёткое понимание что куда летит и когда',
+    },
+    {
+      name: 'Проектирование интеграции',
+      desc: 'Выбор паттерна интеграции (sync/async, REST/message), проектирование API-контрактов и схем данных.',
+      methods: ['Sequence Diagram', 'API Design First', 'Event-Driven Design'],
+      tools: ['Swagger Editor', 'AsyncAPI', 'Draw.io', 'Apicurio'],
+      artifacts: ['Sequence диаграммы', 'OpenAPI / AsyncAPI спецификация', 'Mapping таблица полей'],
+      result: 'Детальный дизайн интеграции понятный обеим командам',
+    },
+    {
+      name: 'Согласование с командами',
+      desc: 'Ревью дизайна интеграции с разработчиками обеих систем. Выявление и устранение противоречий.',
+      methods: ['Architecture Review', 'RFC процесс', 'Async комментирование'],
+      tools: ['Confluence', 'GitHub Discussions', 'Slack', 'Notion'],
+      artifacts: ['Подписанный Integration Design', 'Протокол решений', 'ADR (Architecture Decision Records)'],
+      result: 'Обе команды согласны с дизайном и готовы к реализации',
+    },
+    {
+      name: 'Поддержка реализации',
+      desc: 'Ответы на вопросы разработчиков, уточнение edge cases, контроль соответствия спецификации.',
+      methods: ['Contract Testing', 'Mock-серверы', 'API Versioning'],
+      tools: ['Postman', 'WireMock', 'Jira', 'Swagger'],
+      artifacts: ['Обновлённая API спека', 'Edge cases документ', 'Changelog'],
+      result: 'Интеграция реализована точно по спецификации',
+    },
+    {
+      name: 'End-to-end тестирование',
+      desc: 'Проверка полного потока данных от одной системы до другой в реальной среде.',
+      methods: ['E2E тестирование', 'Нагрузочное тестирование', 'Тестирование отказоустойчивости'],
+      tools: ['Postman Collections', 'JMeter', 'Grafana', 'Kibana'],
+      artifacts: ['E2E Test Cases', 'Отчёт о тестировании', 'Акт приёмки интеграции'],
+      result: 'Интеграция работает корректно в продуктивной среде',
+    },
+  ],
+
+  automation: [
+    {
+      name: 'Погружение в процесс (AS-IS)',
+      desc: 'Понять как процесс работает сейчас: пройти его вместе с исполнителями, зафиксировать каждый шаг, задержки и боли.',
+      methods: ['Shadowing (наблюдение)', 'Интервью с исполнителями', 'Анализ документов', 'Хронометраж'],
+      tools: ['Miro', 'Notion', 'Диктофон', 'Excel'],
+      artifacts: ['Полевые заметки', 'Список болей', 'Первичный AS-IS черновик'],
+      result: 'Полная картина текущего процесса от начала до конца',
+    },
+    {
+      name: 'Моделирование AS-IS',
+      desc: 'Формализация текущего процесса в нотации BPMN или EPC. Выявление всех ветвлений, исключений и участников.',
+      methods: ['BPMN 2.0', 'EPC', 'Swim-lane диаграмма'],
+      tools: ['Camunda Modeler', 'Draw.io', 'Bizagi', 'Lucidchart'],
+      artifacts: ['AS-IS BPMN диаграмма', 'Описание ролей и ответственностей', 'Список исключений'],
+      result: 'Точная модель текущего процесса согласованная с командой',
+    },
+    {
+      name: 'Анализ узких мест',
+      desc: 'Где теряется время? Где ошибки? Что мешает масштабированию? Количественный и качественный анализ.',
+      methods: ['Root Cause Analysis', '5 Почему', 'Ishikawa (Fishbone)', 'Value Stream Mapping'],
+      tools: ['Miro', 'Excel', 'Power BI', 'Notion'],
+      artifacts: ['Карта узких мест', 'Root Cause Report', 'Метрики текущего процесса'],
+      result: 'Чёткий список проблем с понимаем их причин',
+    },
+    {
+      name: 'Проектирование TO-BE',
+      desc: 'Как процесс должен работать после автоматизации? Где убираем ручной труд, где добавляем контроли.',
+      methods: ['BPMN TO-BE', 'Decision Table', 'Gap Analysis'],
+      tools: ['Camunda Modeler', 'Draw.io', 'Miro'],
+      artifacts: ['TO-BE BPMN диаграмма', 'Таблица решений', 'Gap Report'],
+      result: 'Целевая модель процесса согласованная с бизнесом',
+    },
+    {
+      name: 'Составление требований к системе',
+      desc: 'Перевод TO-BE процесса в требования к автоматизирующей системе: функции, интеграции, отчёты.',
+      methods: ['User Stories', 'Functional Requirements', 'NFR'],
+      tools: ['Jira', 'Confluence', 'Notion'],
+      artifacts: ['Backlog', 'Функциональные требования', 'Требования к отчётности', 'SRS'],
+      result: 'Полный пакет требований для разработки или настройки системы',
+    },
+    {
+      name: 'Внедрение и обучение',
+      desc: 'Поддержка запуска: пилот с реальными данными, обучение пользователей, сбор обратной связи.',
+      methods: ['Pilot запуск', 'Обучение пользователей', 'Hypercare период'],
+      tools: ['Confluence', 'LMS', 'Zoom', 'Jira'],
+      artifacts: ['User Guide', 'Обучающие материалы', 'FAQ для пользователей'],
+      result: 'Пользователи работают в новом процессе без возврата к старому',
+    },
+    {
+      name: 'Оценка эффекта',
+      desc: 'Сравниваем метрики до и после. Достигли ли целей автоматизации? Что улучшить?',
+      methods: ['KPI мониторинг', 'Сравнительный анализ', 'Ретроспектива'],
+      tools: ['Power BI', 'Grafana', 'Excel', 'Confluence'],
+      artifacts: ['Отчёт об эффекте', 'Обновлённые метрики', 'Список улучшений v2'],
+      result: 'Доказанный ROI автоматизации и план следующей итерации',
+    },
+  ],
+};
+
+let _wmCurrent = 'product';
+
+function wmSelect(caseKey, btn) {
+  _wmCurrent = caseKey;
+  document.querySelectorAll('.wm-case-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  wmRender();
+}
+
+function wmRender() {
+  const stages = WM_CASES[_wmCurrent] || [];
+  const el = document.getElementById('wm-timeline');
+  if (!el) return;
+
+  el.innerHTML = stages.map((s, i) => `
+    <div class="wm-stage" style="animation-delay:${i * 0.07}s">
+      <div class="wm-stage-head">
+        <div class="wm-stage-num">ЭТАП ${i + 1}</div>
+        <div class="wm-stage-name">${_e(s.name)}</div>
+      </div>
+      <div class="wm-stage-desc">${_e(s.desc)}</div>
+
+      <div class="wm-chip-label">Методы</div>
+      <div class="wm-chips-row">${s.methods.map(m => `<span class="wm-chip method">${_e(m)}</span>`).join('')}</div>
+
+      <div class="wm-chip-label">Инструменты</div>
+      <div class="wm-chips-row">${s.tools.map(t => `<span class="wm-chip tool">${_e(t)}</span>`).join('')}</div>
+
+      <div class="wm-chip-label">Артефакты</div>
+      <div class="wm-chips-row">${s.artifacts.map(a => `<span class="wm-chip artifact">${_e(a)}</span>`).join('')}</div>
+
+      <div class="wm-stage-result">✓ ${_e(s.result)}</div>
+    </div>
+  `).join('');
+}
 </script>
 </body>
 </html>
