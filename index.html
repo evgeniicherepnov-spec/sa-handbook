@@ -509,6 +509,29 @@ svg.diagram { width: 100%; border-radius: 16px; background: rgba(0,0,0,0.3); bor
 }
 .wm-modal-close:hover { border-color:var(--border-highlight); color:var(--text); }
 
+/* ══ SDLC ══ */
+.sdlc-timeline { display:flex; flex-direction:column; gap:0; margin:28px 0; }
+.sdlc-phase { display:flex; gap:20px; position:relative; }
+.sdlc-phase:not(:last-child)::after { content:''; position:absolute; left:19px; top:44px; bottom:-1px; width:2px; background:linear-gradient(to bottom, rgba(255,255,255,0.1), rgba(255,255,255,0.03)); }
+.sdlc-phase-marker { width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:15px; color:#fff; flex-shrink:0; margin-top:4px; box-shadow:0 4px 15px rgba(0,0,0,0.3); }
+.sdlc-phase-body { flex:1; background:var(--bg-glass); border:1px solid var(--border); border-radius:18px; padding:20px 24px; margin-bottom:16px; transition:all .2s; }
+.sdlc-phase-body:hover { border-color:var(--border-highlight); transform:translateX(3px); }
+.sdlc-phase-title { font-size:17px; font-weight:700; color:var(--text); margin-bottom:8px; display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+.sdlc-badge { font-size:11px; font-weight:500; padding:3px 10px; border-radius:20px; font-family:'Golos Text',sans-serif; }
+.sdlc-phase-desc { font-size:13.5px; color:var(--text2); line-height:1.6; margin-bottom:16px; }
+.sdlc-two-col { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:14px; }
+@media(max-width:600px){ .sdlc-two-col { grid-template-columns:1fr; } }
+.sdlc-col-label { font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--text3); font-family:'Unbounded',sans-serif; margin-bottom:8px; }
+.sdlc-list { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:5px; }
+.sdlc-list li { font-size:13px; color:var(--text2); padding-left:14px; position:relative; line-height:1.5; }
+.sdlc-list li::before { content:'·'; position:absolute; left:0; color:var(--accent); font-weight:700; }
+.sdlc-list.sdlc-artifacts li::before { color:#14b8a6; }
+.sdlc-intensity { display:flex; align-items:center; gap:10px; margin-top:4px; }
+.sdlc-intensity-label { font-size:11px; color:var(--text3); white-space:nowrap; }
+.sdlc-bar { flex:1; height:5px; background:rgba(255,255,255,0.06); border-radius:4px; overflow:hidden; }
+.sdlc-bar div { height:100%; border-radius:4px; transition:width .5s ease; }
+.sdlc-intensity-val { font-size:11px; color:var(--text3); white-space:nowrap; min-width:100px; }
+
 /* ══ CAREER TRACK ══ */
 .career-track { position:relative; padding:0 0 0 36px; margin:20px 0; }
 .career-track::before {
@@ -1358,7 +1381,8 @@ select.fb-input option {
 
   <div class="nav-section-label">Старт</div>
   <div class="nav-item active" data-tab="intro" onclick="go('intro',this)"><div class="num">0</div>Кто такой СА</div>
-  
+  <div class="nav-item" data-tab="sdlc" onclick="go('sdlc',this)"><div class="num">0.5</div>SDLC — Жизненный цикл</div>
+
   <div class="nav-section-label">Работа с требованиями</div>
   <div class="nav-item" data-tab="methodology" onclick="go('methodology',this)"><div class="num">1</div>Методологии</div>
   <div class="nav-item" data-tab="stakeholders" onclick="go('stakeholders',this)"><div class="num">2</div>Стейкхолдеры</div>
@@ -1569,6 +1593,307 @@ id (UUID), first_name (VARCHAR), birth_date (DATE), is_active (BOOLEAN).
   <div class="card"><div class="card-icon">🎨</div><div class="card-title">Моделирование</div><div class="card-desc">Рисует UML Sequence, BPMN, ERD для визуализации процессов.</div></div>
   <div class="card"><div class="card-icon">✅</div><div class="card-title">Приёмка (UAT)</div><div class="card-desc">Проверяет вместе с QA, что разработчики сделали именно то, что просил бизнес.</div></div>
 </div>
+</div>
+
+<div class="section" id="tab-sdlc">
+<div class="section-header">
+  <div class="section-tag">Раздел 0.5 · Основы</div>
+  <div class="section-title">SDLC — Жизненный цикл разработки ПО</div>
+  <div class="section-desc">Software Development Life Cycle — это структурированный процесс создания программного обеспечения от идеи до вывода из эксплуатации. СА участвует на каждом этапе, но с разной интенсивностью.</div>
+</div>
+
+<div class="ex ex-purple">
+  <div class="ex-label">Зачем СА знать SDLC</div>
+  <p>SDLC — это общий язык с командой. Когда PM говорит "мы на этапе design" или разработчик спрашивает "это уже в implementation?" — СА должен понимать где он находится, что от него ожидают и какие артефакты нужно подготовить прямо сейчас.</p>
+</div>
+
+<h2>7 фаз SDLC и роль СА в каждой</h2>
+
+<div class="sdlc-timeline">
+
+  <div class="sdlc-phase">
+    <div class="sdlc-phase-marker" style="background:rgba(139,92,246,0.8)">1</div>
+    <div class="sdlc-phase-body">
+      <div class="sdlc-phase-title">Planning <span class="sdlc-badge" style="background:rgba(139,92,246,0.15);color:#c4b5fd">Планирование</span></div>
+      <div class="sdlc-phase-desc">Определяем зачем нужна система, оцениваем feasibility, формируем команду и план.</div>
+      <div class="sdlc-two-col">
+        <div>
+          <div class="sdlc-col-label">Задачи СА</div>
+          <ul class="sdlc-list">
+            <li>Участие в kick-off встречах</li>
+            <li>Определение стейкхолдеров</li>
+            <li>Оценка объёма требований</li>
+            <li>Выявление рисков и ограничений</li>
+          </ul>
+        </div>
+        <div>
+          <div class="sdlc-col-label">Артефакты</div>
+          <ul class="sdlc-list sdlc-artifacts">
+            <li>Project Brief</li>
+            <li>Stakeholder Map</li>
+            <li>Feasibility Study</li>
+            <li>Project Charter</li>
+          </ul>
+        </div>
+      </div>
+      <div class="sdlc-intensity">
+        <span class="sdlc-intensity-label">Интенсивность СА:</span>
+        <div class="sdlc-bar"><div style="width:60%;background:rgba(139,92,246,0.7)"></div></div>
+        <span class="sdlc-intensity-val">Средняя</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sdlc-phase">
+    <div class="sdlc-phase-marker" style="background:rgba(245,158,11,0.8)">2</div>
+    <div class="sdlc-phase-body">
+      <div class="sdlc-phase-title">Analysis <span class="sdlc-badge" style="background:rgba(245,158,11,0.15);color:#fcd34d">Анализ требований</span></div>
+      <div class="sdlc-phase-desc">Главная фаза для СА. Собираем, анализируем и документируем все требования к системе.</div>
+      <div class="sdlc-two-col">
+        <div>
+          <div class="sdlc-col-label">Задачи СА</div>
+          <ul class="sdlc-list">
+            <li>Интервью со стейкхолдерами</li>
+            <li>Выявление функциональных и NFR требований</li>
+            <li>Создание Use Cases и User Stories</li>
+            <li>Приоритизация требований (MoSCoW)</li>
+            <li>Согласование и валидация требований</li>
+          </ul>
+        </div>
+        <div>
+          <div class="sdlc-col-label">Артефакты</div>
+          <ul class="sdlc-list sdlc-artifacts">
+            <li>SRS / ТЗ</li>
+            <li>Use Case Diagram</li>
+            <li>User Stories + AC</li>
+            <li>Product Backlog</li>
+            <li>Матрица трассировки</li>
+          </ul>
+        </div>
+      </div>
+      <div class="sdlc-intensity">
+        <span class="sdlc-intensity-label">Интенсивность СА:</span>
+        <div class="sdlc-bar"><div style="width:100%;background:rgba(245,158,11,0.8)"></div></div>
+        <span class="sdlc-intensity-val">Максимальная</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sdlc-phase">
+    <div class="sdlc-phase-marker" style="background:rgba(20,184,166,0.8)">3</div>
+    <div class="sdlc-phase-body">
+      <div class="sdlc-phase-title">Design <span class="sdlc-badge" style="background:rgba(20,184,166,0.15);color:#5eead4">Проектирование</span></div>
+      <div class="sdlc-phase-desc">Переводим требования в техническое решение: архитектура, модель данных, интерфейсы, API.</div>
+      <div class="sdlc-two-col">
+        <div>
+          <div class="sdlc-col-label">Задачи СА</div>
+          <ul class="sdlc-list">
+            <li>Создание архитектурных диаграмм (C4, ERD)</li>
+            <li>Проектирование API контрактов (OpenAPI)</li>
+            <li>Sequence Diagrams для ключевых сценариев</li>
+            <li>Согласование дизайна с командой</li>
+            <li>Обновление ТЗ с техническими деталями</li>
+          </ul>
+        </div>
+        <div>
+          <div class="sdlc-col-label">Артефакты</div>
+          <ul class="sdlc-list sdlc-artifacts">
+            <li>C4 Model</li>
+            <li>ERD</li>
+            <li>Sequence Diagrams</li>
+            <li>OpenAPI Specification</li>
+            <li>Architecture Decision Records</li>
+          </ul>
+        </div>
+      </div>
+      <div class="sdlc-intensity">
+        <span class="sdlc-intensity-label">Интенсивность СА:</span>
+        <div class="sdlc-bar"><div style="width:85%;background:rgba(20,184,166,0.7)"></div></div>
+        <span class="sdlc-intensity-val">Высокая</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sdlc-phase">
+    <div class="sdlc-phase-marker" style="background:rgba(59,130,246,0.8)">4</div>
+    <div class="sdlc-phase-body">
+      <div class="sdlc-phase-title">Development <span class="sdlc-badge" style="background:rgba(59,130,246,0.15);color:#93c5fd">Разработка</span></div>
+      <div class="sdlc-phase-desc">Разработчики пишут код. СА переключается в режим поддержки и управления изменениями.</div>
+      <div class="sdlc-two-col">
+        <div>
+          <div class="sdlc-col-label">Задачи СА</div>
+          <ul class="sdlc-list">
+            <li>Ответы на вопросы разработчиков</li>
+            <li>Уточнение требований по запросу</li>
+            <li>Управление Change Requests</li>
+            <li>Grooming бэклога следующих спринтов</li>
+            <li>Контроль соответствия реализации требованиям</li>
+          </ul>
+        </div>
+        <div>
+          <div class="sdlc-col-label">Артефакты</div>
+          <ul class="sdlc-list sdlc-artifacts">
+            <li>Change Requests</li>
+            <li>Уточнения к требованиям</li>
+            <li>Обновлённые диаграммы</li>
+            <li>Refined User Stories</li>
+          </ul>
+        </div>
+      </div>
+      <div class="sdlc-intensity">
+        <span class="sdlc-intensity-label">Интенсивность СА:</span>
+        <div class="sdlc-bar"><div style="width:40%;background:rgba(59,130,246,0.7)"></div></div>
+        <span class="sdlc-intensity-val">Низкая</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sdlc-phase">
+    <div class="sdlc-phase-marker" style="background:rgba(239,68,68,0.8)">5</div>
+    <div class="sdlc-phase-body">
+      <div class="sdlc-phase-title">Testing <span class="sdlc-badge" style="background:rgba(239,68,68,0.15);color:#fca5a5">Тестирование</span></div>
+      <div class="sdlc-phase-desc">Проверяем что система работает по требованиям. СА — эксперт по требованиям для QA команды.</div>
+      <div class="sdlc-two-col">
+        <div>
+          <div class="sdlc-col-label">Задачи СА</div>
+          <ul class="sdlc-list">
+            <li>Помощь QA в написании тест-кейсов</li>
+            <li>Прояснение acceptance criteria</li>
+            <li>Участие в UAT с заказчиком</li>
+            <li>Оценка критичности найденных багов</li>
+            <li>Решение спорных случаев "баг или фича"</li>
+          </ul>
+        </div>
+        <div>
+          <div class="sdlc-col-label">Артефакты</div>
+          <ul class="sdlc-list sdlc-artifacts">
+            <li>UAT Test Plan</li>
+            <li>Чек-лист приёмки</li>
+            <li>Баг-репорты (оценка)</li>
+            <li>Акт приёмки</li>
+          </ul>
+        </div>
+      </div>
+      <div class="sdlc-intensity">
+        <span class="sdlc-intensity-label">Интенсивность СА:</span>
+        <div class="sdlc-bar"><div style="width:70%;background:rgba(239,68,68,0.7)"></div></div>
+        <span class="sdlc-intensity-val">Средне-высокая</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sdlc-phase">
+    <div class="sdlc-phase-marker" style="background:rgba(16,185,129,0.8)">6</div>
+    <div class="sdlc-phase-body">
+      <div class="sdlc-phase-title">Deployment <span class="sdlc-badge" style="background:rgba(16,185,129,0.15);color:#6ee7b7">Деплой</span></div>
+      <div class="sdlc-phase-desc">Система выходит в продакшен. СА контролирует соответствие результата исходным требованиям.</div>
+      <div class="sdlc-two-col">
+        <div>
+          <div class="sdlc-col-label">Задачи СА</div>
+          <ul class="sdlc-list">
+            <li>Финальная приёмка с заказчиком</li>
+            <li>Подписание акта выполненных работ</li>
+            <li>Передача документации</li>
+            <li>Поддержка при rollout (гиперкер)</li>
+          </ul>
+        </div>
+        <div>
+          <div class="sdlc-col-label">Артефакты</div>
+          <ul class="sdlc-list sdlc-artifacts">
+            <li>Release Notes</li>
+            <li>Акт приёмки</li>
+            <li>User Guide</li>
+            <li>Финальная документация</li>
+          </ul>
+        </div>
+      </div>
+      <div class="sdlc-intensity">
+        <span class="sdlc-intensity-label">Интенсивность СА:</span>
+        <div class="sdlc-bar"><div style="width:45%;background:rgba(16,185,129,0.7)"></div></div>
+        <span class="sdlc-intensity-val">Средняя</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sdlc-phase">
+    <div class="sdlc-phase-marker" style="background:rgba(100,116,139,0.8)">7</div>
+    <div class="sdlc-phase-body">
+      <div class="sdlc-phase-title">Maintenance <span class="sdlc-badge" style="background:rgba(100,116,139,0.15);color:#94a3b8">Поддержка</span></div>
+      <div class="sdlc-phase-desc">Система живёт в продакшене. Появляются новые требования — и цикл начинается заново.</div>
+      <div class="sdlc-two-col">
+        <div>
+          <div class="sdlc-col-label">Задачи СА</div>
+          <ul class="sdlc-list">
+            <li>Анализ обращений и инцидентов</li>
+            <li>Оценка новых запросов на изменение</li>
+            <li>Актуализация документации</li>
+            <li>Подготовка следующей итерации</li>
+          </ul>
+        </div>
+        <div>
+          <div class="sdlc-col-label">Артефакты</div>
+          <ul class="sdlc-list sdlc-artifacts">
+            <li>Change Requests v2</li>
+            <li>Обновлённое ТЗ</li>
+            <li>Backlog новых фич</li>
+          </ul>
+        </div>
+      </div>
+      <div class="sdlc-intensity">
+        <span class="sdlc-intensity-label">Интенсивность СА:</span>
+        <div class="sdlc-bar"><div style="width:30%;background:rgba(100,116,139,0.7)"></div></div>
+        <span class="sdlc-intensity-val">Низкая</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<h2 style="margin-top:40px">SDLC в Waterfall vs Agile</h2>
+<p>Фазы SDLC одинаковые в обоих подходах — но организованы принципиально по-разному.</p>
+
+<div class="compare-grid" style="margin-top:20px">
+  <div class="compare-card">
+    <div class="compare-label c-yellow">Waterfall</div>
+    <ul class="sdlc-list" style="margin-top:12px">
+      <li>Фазы выполняются <strong>последовательно и однократно</strong></li>
+      <li>Все требования собираются <strong>до начала разработки</strong></li>
+      <li>СА создаёт полное ТЗ в самом начале</li>
+      <li>Изменения требований — дорого и болезненно</li>
+      <li>Результат виден только в конце проекта</li>
+      <li>Подходит для: строительство, госзакупки, hardware</li>
+    </ul>
+  </div>
+  <div class="compare-card">
+    <div class="compare-label c-purple">Agile (Scrum)</div>
+    <ul class="sdlc-list" style="margin-top:12px">
+      <li>Все фазы повторяются в каждом спринте (1-2 недели)</li>
+      <li>Требования собираются <strong>итеративно</strong></li>
+      <li>СА работает с бэклогом, уточняет требования постоянно</li>
+      <li>Изменения — норма, встроены в процесс</li>
+      <li>Рабочий продукт виден после каждого спринта</li>
+      <li>Подходит для: продуктовые компании, стартапы, SaaS</li>
+    </ul>
+  </div>
+</div>
+
+<div class="ex ex-yellow" style="margin-top:28px">
+  <div class="ex-label">Как это выглядит на практике</div>
+  <p><strong>Waterfall:</strong> СА 3 месяца собирает требования → пишет 80-страничное ТЗ → передаёт разработчикам → появляется через полгода на приёмке.</p>
+  <p style="margin-top:8px"><strong>Agile:</strong> СА каждый спринт уточняет 5-10 User Stories → присутствует на grooming и planning → обновляет документацию по ходу → участвует в review каждые 2 недели.</p>
+</div>
+
+<h2 style="margin-top:36px">Что будет если пропустить фазу</h2>
+<table>
+  <tr><th>Пропущенная фаза</th><th>Последствия</th></tr>
+  <tr><td><strong>Planning</strong></td><td>Нет понимания зачем делаем, команда работает на разные цели</td></tr>
+  <tr><td><strong>Analysis</strong></td><td>Разработчики угадывают требования → переделки → срыв сроков</td></tr>
+  <tr><td><strong>Design</strong></td><td>Архитектурные проблемы всплывают в разработке → дорогой рефакторинг</td></tr>
+  <tr><td><strong>Testing</strong></td><td>Баги уходят в продакшен → потеря репутации и деньги на исправление</td></tr>
+  <tr><td><strong>Deployment</strong></td><td>Хаотичный релиз → инциденты → откаты</td></tr>
+  <tr><td><strong>Maintenance</strong></td><td>Технический долг накапливается → система деградирует</td></tr>
+</table>
+
 </div>
 
 <div class="section" id="tab-methodology">
