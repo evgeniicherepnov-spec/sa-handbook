@@ -1446,6 +1446,7 @@ select.fb-input option {
       <div class="nav-item" data-tab="api" onclick="go('api',this)"><div class="num">14</div>REST API и OpenAPI</div>
       <div class="nav-item" data-tab="graphql-grpc" onclick="go('graphql-grpc',this)"><div class="num">+</div>GraphQL и gRPC</div>
       <div class="nav-item" data-tab="yaml" onclick="go('yaml',this)"><div class="num">+</div>YAML для СА</div>
+      <div class="nav-item" data-tab="ddd" onclick="go('ddd',this)"><div class="num">+</div>DDD — проектирование домена</div>
       <div class="nav-item" data-tab="brokers" onclick="go('brokers',this)"><div class="num">15</div>Брокеры сообщений</div>
       <div class="nav-item" data-tab="security" onclick="go('security',this)"><div class="num">+</div>Безопасность (Auth)</div>
       <div class="nav-item" data-tab="infra" onclick="go('infra',this)"><div class="num">+</div>Кэш и Логирование</div>
@@ -2809,7 +2810,39 @@ id (UUID), first_name (VARCHAR), birth_date (DATE), is_active (BOOLEAN).
   <text x="355" y="132" text-anchor="middle" fill="#a1a1aa" font-size="10">&lt;&lt;include&gt;&gt;</text>
 </svg>
 
-<h2>Критерии хорошей User Story (INVEST)</h2>
+<h2>Job Story — альтернатива User Story</h2>
+<p>Job Story появилась как ответ на главный недостаток User Story — роль слишком абстрактна и не передаёт контекст ситуации. Формат разработан в Intercom.</p>
+
+<div class="compare-grid">
+  <div class="compare-card">
+    <div class="compare-label c-purple">User Story</div>
+    <div class="code" style="margin:10px 0;background:rgba(0,0,0,0.4)">Как <strong>зарегистрированный пользователь</strong>,
+я хочу <strong>получить уведомление об оплате</strong>,
+чтобы <strong>знать что платёж прошёл</strong>.</div>
+    <p style="font-size:13px;color:var(--text3)">Роль размыта. Непонятно в какой ситуации это нужно и почему именно сейчас.</p>
+  </div>
+  <div class="compare-card">
+    <div class="compare-label c-teal">Job Story</div>
+    <div class="code" style="margin:10px 0;background:rgba(0,0,0,0.4)">Когда я <strong>только что оплатил заказ</strong>,
+я хочу <strong>сразу получить подтверждение</strong>,
+чтобы <strong>не беспокоиться что деньги списались а заказ не создался</strong>.</div>
+    <p style="font-size:13px;color:var(--text3)">Конкретная ситуация. Понятна мотивация. Можно сразу придумать решение.</p>
+  </div>
+</div>
+
+<div class="ex ex-green" style="margin-top:4px">
+  <div class="ex-label">Формула Job Story</div>
+  <p><strong>Когда [ситуация/триггер]</strong> — конкретный момент когда возникает потребность<br>
+  <strong>Я хочу [мотивация/действие]</strong> — что пользователь хочет сделать<br>
+  <strong>Чтобы [ожидаемый результат]</strong> — какую проблему это решает</p>
+</div>
+
+<div class="ex ex-yellow" style="margin-top:12px">
+  <div class="ex-label">Когда использовать Job Story вместо User Story</div>
+  <p>Job Story лучше подходит когда важен <strong>контекст ситуации</strong> — не кто пользователь, а когда и почему у него возникает потребность. Особенно хорош для сложных продуктов где один и тот же пользователь имеет разные мотивации в разных ситуациях.</p>
+</div>
+
+<h2 style="margin-top:28px">Критерии хорошей User Story (INVEST)</h2>
 <table>
   <tr><th>Буква</th><th>Расшифровка</th><th>Смысл</th></tr>
   <tr><td><span class="badge bp">I</span></td><td>Independent</td><td>Можно брать в работу независимо от других.</td></tr>
@@ -4869,6 +4902,120 @@ components:
   ⚠️ <strong>Неправильные отступы</strong> — каждый уровень ровно 2 пробела<br>
   ⚠️ <strong>Пробел после двоеточия</strong> — <code>key: value</code> (не <code>key:value</code>)<br>
   ⚠️ <strong>Кавычки не обязательны</strong> для строк, но нужны если строка начинается с : или содержит спецсимволы</p>
+</div>
+
+</div>
+
+<div class="section" id="tab-ddd">
+<div class="section-header">
+  <div class="section-tag">Архитектура · Проектирование</div>
+  <div class="section-title">DDD — Domain-Driven Design</div>
+  <div class="section-desc">Предметно-ориентированное проектирование — подход где структура системы отражает структуру бизнеса. СА использует DDD чтобы говорить с разработчиками и бизнесом на одном языке.</div>
+</div>
+
+<div class="ex ex-purple">
+  <div class="ex-label">Зачем СА знать DDD</div>
+  <p>DDD — это не про код, это про <strong>общий язык</strong> и <strong>границы ответственности</strong>. Когда бизнес говорит «заказ», разработчик может иметь в виду совсем другую сущность. DDD учит фиксировать единый глоссарий и чётко разграничивать зоны системы. Именно это и делает СА.</p>
+</div>
+
+<h2>Ключевые концепции DDD</h2>
+
+<div class="sdlc-timeline">
+
+  <div class="sdlc-phase">
+    <div class="sdlc-phase-marker" style="background:rgba(139,92,246,0.8)">1</div>
+    <div class="sdlc-phase-body">
+      <div class="sdlc-phase-title">Ubiquitous Language <span class="sdlc-badge" style="background:rgba(139,92,246,0.15);color:#c4b5fd">Единый язык</span></div>
+      <div class="sdlc-phase-desc">Общий словарь терминов который используют и бизнес, и разработчики, и аналитики. Один термин — одно значение во всей команде.</div>
+      <div class="ex ex-green" style="margin-top:8px">
+        <div class="ex-label">Пример проблемы без единого языка</div>
+        <p>Бизнес говорит «клиент» — имея в виду юрлицо.<br>
+        Разработчик слышит «клиент» — создаёт таблицу users для физлиц.<br>
+        СА с DDD: фиксирует в глоссарии: <strong>Клиент = юридическое лицо</strong>, <strong>Пользователь = сотрудник клиента</strong>.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="sdlc-phase">
+    <div class="sdlc-phase-marker" style="background:rgba(20,184,166,0.8)">2</div>
+    <div class="sdlc-phase-body">
+      <div class="sdlc-phase-title">Bounded Context <span class="sdlc-badge" style="background:rgba(20,184,166,0.15);color:#5eead4">Ограниченный контекст</span></div>
+      <div class="sdlc-phase-desc">Чёткая граница внутри которой термины и модели имеют однозначное значение. Разные контексты могут использовать одно слово по-разному — и это нормально.</div>
+      <div class="compare-grid" style="margin-top:12px">
+        <div class="compare-card">
+          <div class="compare-label c-yellow">Контекст «Продажи»</div>
+          <p style="font-size:13px;color:var(--text2);margin:8px 0">«Заказ» = намерение купить, может быть отменён, содержит позиции и скидки</p>
+        </div>
+        <div class="compare-card">
+          <div class="compare-label c-teal">Контекст «Доставка»</div>
+          <p style="font-size:13px;color:var(--text2);margin:8px 0">«Заказ» = физическая посылка с адресом, весом, статусом доставки</p>
+        </div>
+      </div>
+      <p style="font-size:13px;color:var(--text3);margin-top:8px">Одно слово — разный смысл в разных контекстах. DDD говорит: это нормально, главное чётко зафиксировать границы.</p>
+    </div>
+  </div>
+
+  <div class="sdlc-phase">
+    <div class="sdlc-phase-marker" style="background:rgba(245,158,11,0.8)">3</div>
+    <div class="sdlc-phase-body">
+      <div class="sdlc-phase-title">Context Map <span class="sdlc-badge" style="background:rgba(245,158,11,0.15);color:#fcd34d">Карта контекстов</span></div>
+      <div class="sdlc-phase-desc">Диаграмма показывающая все Bounded Context системы и отношения между ними. Главный артефакт DDD для СА.</div>
+      <svg class="diagram" viewBox="0 0 580 240" style="max-height:240px;margin-top:12px">
+        <!-- Продажи -->
+        <ellipse cx="110" cy="100" rx="90" ry="65" fill="rgba(139,92,246,0.1)" stroke="#8b5cf6" stroke-width="1.5"/>
+        <text x="110" y="88" text-anchor="middle" fill="#c4b5fd" font-size="12" font-weight="700" font-family="'Unbounded',sans-serif">Продажи</text>
+        <text x="110" y="105" text-anchor="middle" fill="#a78bfa" font-size="10" font-family="'Golos Text',sans-serif">Заказ, Клиент</text>
+        <text x="110" y="119" text-anchor="middle" fill="#a78bfa" font-size="10" font-family="'Golos Text',sans-serif">Скидка, Позиция</text>
+        <!-- Склад -->
+        <ellipse cx="300" cy="80" rx="85" ry="58" fill="rgba(20,184,166,0.1)" stroke="#14b8a6" stroke-width="1.5"/>
+        <text x="300" y="68" text-anchor="middle" fill="#5eead4" font-size="12" font-weight="700" font-family="'Unbounded',sans-serif">Склад</text>
+        <text x="300" y="84" text-anchor="middle" fill="#99f6e4" font-size="10" font-family="'Golos Text',sans-serif">Товар, Остаток</text>
+        <text x="300" y="98" text-anchor="middle" fill="#99f6e4" font-size="10" font-family="'Golos Text',sans-serif">Резерв</text>
+        <!-- Доставка -->
+        <ellipse cx="460" cy="130" rx="90" ry="65" fill="rgba(245,158,11,0.1)" stroke="#f59e0b" stroke-width="1.5"/>
+        <text x="460" y="118" text-anchor="middle" fill="#fcd34d" font-size="12" font-weight="700" font-family="'Unbounded',sans-serif">Доставка</text>
+        <text x="460" y="134" text-anchor="middle" fill="#fde68a" font-size="10" font-family="'Golos Text',sans-serif">Посылка, Маршрут</text>
+        <text x="460" y="148" text-anchor="middle" fill="#fde68a" font-size="10" font-family="'Golos Text',sans-serif">Курьер, Адрес</text>
+        <!-- Arrows -->
+        <line x1="198" y1="95" x2="215" y2="88" stroke="#52525b" stroke-width="1.5" marker-end="url(#arr)"/>
+        <line x1="382" y1="95" x2="368" y2="104" stroke="#52525b" stroke-width="1.5" marker-end="url(#arr)"/>
+        <!-- Labels -->
+        <text x="207" y="78" text-anchor="middle" fill="#71717a" font-size="9" font-family="'Golos Text',sans-serif">проверяет</text>
+        <text x="375" y="94" text-anchor="middle" fill="#71717a" font-size="9" font-family="'Golos Text',sans-serif">передаёт</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="sdlc-phase">
+    <div class="sdlc-phase-marker" style="background:rgba(239,68,68,0.8)">4</div>
+    <div class="sdlc-phase-body">
+      <div class="sdlc-phase-title">Aggregate <span class="sdlc-badge" style="background:rgba(239,68,68,0.15);color:#fca5a5">Агрегат</span></div>
+      <div class="sdlc-phase-desc">Группа связанных объектов которая обрабатывается как единое целое. У каждого агрегата есть корневой объект (Aggregate Root) через который происходит всё взаимодействие.</div>
+      <div class="ex ex-yellow" style="margin-top:8px">
+        <div class="ex-label">Пример агрегата «Заказ»</div>
+        <p><strong>Aggregate Root:</strong> Заказ (Order) — только через него можно изменить состав<br>
+        <strong>Entities внутри:</strong> Позиция заказа (OrderItem), Адрес доставки<br>
+        <strong>Value Objects:</strong> Сумма, Валюта, Статус<br><br>
+        Нельзя напрямую изменить OrderItem — только через Order. Это защищает бизнес-инварианты.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<h2 style="margin-top:8px">Как СА применяет DDD на практике</h2>
+<table>
+  <tr><th>Задача СА</th><th>DDD инструмент</th></tr>
+  <tr><td>Создание глоссария проекта</td><td>Ubiquitous Language — фиксируем каждый термин с бизнесом</td></tr>
+  <tr><td>Разграничение зон ответственности микросервисов</td><td>Bounded Context — один контекст = один сервис</td></tr>
+  <tr><td>Описание интеграций между сервисами</td><td>Context Map — как контексты взаимодействуют</td></tr>
+  <tr><td>Проектирование модели данных</td><td>Aggregates — что является корневой сущностью</td></tr>
+  <tr><td>Event Storming сессия с командой</td><td>Выявление доменных событий и границ</td></tr>
+</table>
+
+<div class="ex ex-purple" style="margin-top:20px">
+  <div class="ex-label">DDD и микросервисы</div>
+  <p>Bounded Context — главный критерий для разбиения монолита на микросервисы. Один Bounded Context = один микросервис. Если вы правильно определили контексты, микросервисы будут слабо связаны и легко масштабируемы. Это то что СА проектирует вместе с архитектором.</p>
 </div>
 
 </div>
