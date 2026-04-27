@@ -2516,6 +2516,8 @@ id (UUID), first_name (VARCHAR), birth_date (DATE), is_active (BOOLEAN).
   <button class="diag-tab" onclick="showDiag('act',this)">Activity</button>
   <button class="diag-tab" onclick="showDiag('comp',this)">Component</button>
   <button class="diag-tab" onclick="showDiag('epc',this)">EPC</button>
+  <button class="diag-tab" onclick="showDiag('context',this)">Context Diagram</button>
+  <button class="diag-tab" onclick="showDiag('decision',this)">Decision Table</button>
 </div>
 
 <!-- ══ USE CASE ══ -->
@@ -3059,6 +3061,7 @@ id (UUID), first_name (VARCHAR), birth_date (DATE), is_active (BOOLEAN).
 </table>
 </div>
 
+<div id="dp-context" class="diag-panel">
 <h2>Контекстная диаграмма (System Context Diagram)</h2>
 <p>Один из первых артефактов по Вигерсу — диаграмма контекста системы. Показывает систему как «чёрный ящик» в окружении внешних сущностей, которые с ней взаимодействуют. Отвечает на вопрос: «Что находится внутри системы, а что — снаружи?»</p>
 
@@ -3134,6 +3137,9 @@ id (UUID), first_name (VARCHAR), birth_date (DATE), is_active (BOOLEAN).
   </defs>
 </svg>
 
+</div>
+
+<div id="dp-decision" class="diag-panel">
 <h2>Таблица решений (Decision Table)</h2>
 <p>Таблица решений — мощный инструмент для формализации сложной бизнес-логики с множеством условий. Вигерс рекомендует использовать её всегда, когда в требовании есть больше 3 условий «если… то…». Она однозначна, легко тестируется и не допускает пропущенных сценариев.</p>
 
@@ -3192,6 +3198,7 @@ id (UUID), first_name (VARCHAR), birth_date (DATE), is_active (BOOLEAN).
 </table>
 </div>
 <p style="font-size:13px; color:var(--text3); margin-top:10px;">«—» означает «не важно» (don't care). Каждый столбец — это отдельный тест-кейс. QA инженер может напрямую превратить таблицу в тесты.</p>
+</div>
 
 </div>
 <div class="section" id="tab-processes">
