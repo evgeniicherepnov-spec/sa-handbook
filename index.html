@@ -1392,67 +1392,73 @@ select.fb-input option {
   <div class="nav-group">
     <div class="nav-section-label nav-toggle" onclick="navToggle(this)">Старт<span class="nav-arrow">▾</span></div>
     <div class="nav-group-items">
-      <div class="nav-item active" data-tab="intro" onclick="go('intro',this)"><div class="num">0</div>Кто такой СА</div>
-      <div class="nav-item" data-tab="sdlc" onclick="go('sdlc',this)"><div class="num">0.5</div>SDLC — Жизненный цикл</div>
+      <div class="nav-item active" data-tab="intro" onclick="go('intro',this)"><div class="num">1</div>Кто такой СА</div>
+      <div class="nav-item" data-tab="sdlc" onclick="go('sdlc',this)"><div class="num">2</div>SDLC — Жизненный цикл</div>
+      <div class="nav-item" data-tab="methodology" onclick="go('methodology',this)"><div class="num">3</div>Методологии</div>
+      <div class="nav-item" data-tab="workmap" onclick="go('workmap',this)"><div class="num">🗺</div>Карта работы СА</div>
     </div>
   </div>
 
   <div class="nav-group">
-    <div class="nav-section-label nav-toggle" onclick="navToggle(this)">Работа с требованиями<span class="nav-arrow">▾</span></div>
+    <div class="nav-section-label nav-toggle" onclick="navToggle(this)">Исследование<span class="nav-arrow">▾</span></div>
     <div class="nav-group-items">
-      <div class="nav-item" data-tab="methodology" onclick="go('methodology',this)"><div class="num">1</div>Методологии</div>
-      <div class="nav-item" data-tab="stakeholders" onclick="go('stakeholders',this)"><div class="num">2</div>Стейкхолдеры</div>
-      <div class="nav-item" data-tab="reqs" onclick="go('reqs',this)"><div class="num">3</div>Виды требований</div>
-      <div class="nav-item" data-tab="srs" onclick="go('srs',this)"><div class="num">+</div>Структура Спецификации</div>
-      <div class="nav-item" data-tab="traceability" onclick="go('traceability',this)"><div class="num">+</div>Матрица Трассировки</div>
+      <div class="nav-item" data-tab="stakeholders" onclick="go('stakeholders',this)"><div class="num">4</div>Стейкхолдеры</div>
+      <div class="nav-item" data-tab="gather" onclick="go('gather',this)"><div class="num">5</div>Методы сбора</div>
+    </div>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-section-label nav-toggle" onclick="navToggle(this)">Требования<span class="nav-arrow">▾</span></div>
+    <div class="nav-group-items">
+      <div class="nav-item" data-tab="reqs" onclick="go('reqs',this)"><div class="num">6</div>Виды требований</div>
+      <div class="nav-item" data-tab="userstory" onclick="go('userstory',this)"><div class="num">7</div>User Story / Use Case</div>
+      <div class="nav-item" data-tab="accept" onclick="go('accept',this)"><div class="num">8</div>Критерии приёмки</div>
       <div class="nav-item" data-tab="priority" onclick="go('priority',this)"><div class="num">+</div>Приоритизация требований</div>
+      <div class="nav-item" data-tab="traceability" onclick="go('traceability',this)"><div class="num">+</div>Матрица Трассировки</div>
       <div class="nav-item" data-tab="req-mgmt" onclick="go('req-mgmt',this)"><div class="num">+</div>Управление требованиями</div>
-      <div class="nav-item" data-tab="gather" onclick="go('gather',this)"><div class="num">4</div>Методы сбора</div>
-      <div class="nav-item" data-tab="userstory" onclick="go('userstory',this)"><div class="num">5</div>User Story / Use Case</div>
-      <div class="nav-item" data-tab="accept" onclick="go('accept',this)"><div class="num">6</div>Критерии приёмки</div>
+      <div class="nav-item" data-tab="srs" onclick="go('srs',this)"><div class="num">+</div>Структура Спецификации</div>
     </div>
   </div>
 
   <div class="nav-group">
     <div class="nav-section-label nav-toggle" onclick="navToggle(this)">Моделирование<span class="nav-arrow">▾</span></div>
     <div class="nav-group-items">
-      <div class="nav-item" data-tab="diagrams" onclick="go('diagrams',this)"><div class="num">7</div>Все Диаграммы (13 шт)</div>
-      <div class="nav-item" data-tab="processes" onclick="go('processes',this)"><div class="num">8</div>Бизнес-процессы</div>
+      <div class="nav-item" data-tab="processes" onclick="go('processes',this)"><div class="num">9</div>Бизнес-процессы</div>
+      <div class="nav-item" data-tab="diagrams" onclick="go('diagrams',this)"><div class="num">10</div>Все Диаграммы (13 шт)</div>
     </div>
   </div>
 
   <div class="nav-group">
-    <div class="nav-section-label nav-toggle" onclick="navToggle(this)">Инженерия и Данные<span class="nav-arrow">▾</span></div>
+    <div class="nav-section-label nav-toggle" onclick="navToggle(this)">Данные и SQL<span class="nav-arrow">▾</span></div>
     <div class="nav-group-items">
-      <div class="nav-item" data-tab="db" onclick="go('db',this)"><div class="num">9</div>Базы данных</div>
+      <div class="nav-item" data-tab="db" onclick="go('db',this)"><div class="num">11</div>Базы данных</div>
       <div class="nav-item" data-tab="db-adv" onclick="go('db-adv',this)"><div class="num">+</div>Индексы и Нормализация</div>
-      <div class="nav-item" data-tab="sql" onclick="go('sql',this)"><div class="num">10</div>SQL</div>
+      <div class="nav-item" data-tab="sql" onclick="go('sql',this)"><div class="num">12</div>SQL</div>
     </div>
   </div>
 
   <div class="nav-group">
     <div class="nav-section-label nav-toggle" onclick="navToggle(this)">Архитектура и Интеграции<span class="nav-arrow">▾</span></div>
     <div class="nav-group-items">
-      <div class="nav-item" data-tab="arch" onclick="go('arch',this)"><div class="num">11</div>Архитектура систем</div>
+      <div class="nav-item" data-tab="arch" onclick="go('arch',this)"><div class="num">13</div>Архитектура систем</div>
       <div class="nav-item" data-tab="patterns" onclick="go('patterns',this)"><div class="num">+</div>Паттерны микросервисов</div>
-      <div class="nav-item" data-tab="api" onclick="go('api',this)"><div class="num">12</div>REST API и OpenAPI</div>
-      <div class="nav-item" data-tab="brokers" onclick="go('brokers',this)"><div class="num">13</div>Брокеры сообщений</div>
-      <div class="nav-item" data-tab="security" onclick="go('security',this)"><div class="num">14</div>Безопасность (Auth)</div>
-      <div class="nav-item" data-tab="infra" onclick="go('infra',this)"><div class="num">15</div>Кэш и Логирование</div>
+      <div class="nav-item" data-tab="api" onclick="go('api',this)"><div class="num">14</div>REST API и OpenAPI</div>
+      <div class="nav-item" data-tab="brokers" onclick="go('brokers',this)"><div class="num">15</div>Брокеры сообщений</div>
+      <div class="nav-item" data-tab="security" onclick="go('security',this)"><div class="num">+</div>Безопасность (Auth)</div>
+      <div class="nav-item" data-tab="infra" onclick="go('infra',this)"><div class="num">+</div>Кэш и Логирование</div>
     </div>
   </div>
 
   <div class="nav-group">
     <div class="nav-section-label nav-toggle" onclick="navToggle(this)">Практика и Карьера<span class="nav-arrow">▾</span></div>
     <div class="nav-group-items">
-      <div class="nav-item" data-tab="faq" onclick="go('faq',this)"><div class="num">★</div>FAQ: Топ-25 Вопросов</div>
       <div class="nav-item" data-tab="tz-example" onclick="go('tz-example',this)"><div class="num">📋</div>Сквозной пример ТЗ</div>
+      <div class="nav-item" data-tab="faq" onclick="go('faq',this)"><div class="num">★</div>FAQ: Топ-25 Вопросов</div>
       <div class="nav-item" data-tab="mistakes" onclick="go('mistakes',this)"><div class="num">⚡</div>Ошибки джуна</div>
       <div class="nav-item" data-tab="checklist" onclick="go('checklist',this)"><div class="num">✓</div>Чек-лист ТЗ</div>
       <div class="nav-item" data-tab="templates" onclick="go('templates',this)"><div class="num">📄</div>Шаблоны документов</div>
       <div class="nav-item" data-tab="career" onclick="go('career',this)"><div class="num">🚀</div>Карьерный трек</div>
       <div class="nav-item" data-tab="resume" onclick="go('resume',this)"><div class="num">📝</div>Конструктор резюме</div>
-      <div class="nav-item" data-tab="workmap" onclick="go('workmap',this)"><div class="num">🗺</div>Карта работы СА</div>
     </div>
   </div>
 
