@@ -3554,6 +3554,73 @@ id (UUID), first_name (VARCHAR), birth_date (DATE), is_active (BOOLEAN).
   <tr><td><strong>Activity Final</strong></td><td>◎ круг в круге</td><td>Завершение всей активности</td></tr>
   <tr><td><strong>Swimlane</strong></td><td>Вертикальные или горизонтальные полосы</td><td>Зоны ответственности (как в BPMN)</td></tr>
 </table>
+
+<svg class="diagram" viewBox="0 0 640 320" style="max-height:320px">
+  <defs>
+    <marker id="act-arr" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#71717a"/></marker>
+    <marker id="act-arr-g" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#10b981"/></marker>
+    <marker id="act-arr-r" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#f43f5e"/></marker>
+  </defs>
+  <!-- Swimlane: Клиент -->
+  <rect x="0" y="0" width="310" height="320" fill="rgba(20,184,166,0.04)" stroke="rgba(20,184,166,0.2)" stroke-width="1"/>
+  <rect x="0" y="0" width="310" height="28" fill="rgba(20,184,166,0.12)" stroke="none"/>
+  <text x="155" y="19" text-anchor="middle" fill="#5eead4" font-size="11" font-weight="700" font-family="'Unbounded',sans-serif">Клиент</text>
+  <!-- Swimlane: Система -->
+  <rect x="310" y="0" width="330" height="320" fill="rgba(139,92,246,0.04)" stroke="rgba(139,92,246,0.2)" stroke-width="1"/>
+  <rect x="310" y="0" width="330" height="28" fill="rgba(139,92,246,0.12)" stroke="none"/>
+  <text x="475" y="19" text-anchor="middle" fill="#c4b5fd" font-size="11" font-weight="700" font-family="'Unbounded',sans-serif">Система</text>
+
+  <!-- Initial node -->
+  <circle cx="155" cy="58" r="11" fill="#14b8a6"/>
+  <line x1="155" y1="69" x2="155" y2="90" stroke="#71717a" stroke-width="1.5" marker-end="url(#act-arr)"/>
+
+  <!-- Activity: Оформить заказ -->
+  <rect x="80" y="90" width="150" height="34" rx="17" fill="rgba(20,184,166,0.12)" stroke="#14b8a6" stroke-width="1.5"/>
+  <text x="155" y="112" text-anchor="middle" fill="#5eead4" font-size="12">Оформить заказ</text>
+  <!-- Arrow to system -->
+  <line x1="230" y1="107" x2="365" y2="107" stroke="#71717a" stroke-width="1.5" marker-end="url(#act-arr)"/>
+  <text x="297" y="99" text-anchor="middle" fill="#71717a" font-size="9">заявка</text>
+
+  <!-- Activity: Проверить наличие -->
+  <rect x="365" y="90" width="155" height="34" rx="17" fill="rgba(139,92,246,0.12)" stroke="#8b5cf6" stroke-width="1.5"/>
+  <text x="442" y="112" text-anchor="middle" fill="#c4b5fd" font-size="12">Проверить наличие</text>
+  <line x1="442" y1="124" x2="442" y2="150" stroke="#71717a" stroke-width="1.5" marker-end="url(#act-arr)"/>
+
+  <!-- Decision node -->
+  <polygon points="442,150 478,175 442,200 406,175" fill="rgba(245,158,11,0.1)" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="442" y="179" text-anchor="middle" fill="#fcd34d" font-size="10">в наличии?</text>
+
+  <!-- [Нет] → left to client lane -->
+  <line x1="406" y1="175" x2="230" y2="175" stroke="#71717a" stroke-width="1.5" marker-end="url(#act-arr-r)"/>
+  <text x="316" y="167" text-anchor="middle" fill="#f43f5e" font-size="10">[Нет]</text>
+  <rect x="80" y="158" width="150" height="34" rx="17" fill="rgba(244,63,94,0.1)" stroke="#f43f5e" stroke-width="1.5"/>
+  <text x="155" y="180" text-anchor="middle" fill="#fda4af" font-size="11">Уведомить об ошибке</text>
+
+  <!-- [Да] → down -->
+  <line x1="442" y1="200" x2="442" y2="225" stroke="#71717a" stroke-width="1.5" marker-end="url(#act-arr-g)"/>
+  <text x="455" y="216" fill="#10b981" font-size="10">[Да]</text>
+
+  <!-- Fork -->
+  <rect x="382" y="225" width="120" height="5" rx="2" fill="#8b5cf6"/>
+  <line x1="400" y1="230" x2="400" y2="252" stroke="#71717a" stroke-width="1.5" marker-end="url(#act-arr)"/>
+  <line x1="484" y1="230" x2="484" y2="252" stroke="#71717a" stroke-width="1.5" marker-end="url(#act-arr)"/>
+
+  <!-- Parallel activities -->
+  <rect x="340" y="252" width="112" height="32" rx="16" fill="rgba(139,92,246,0.12)" stroke="#8b5cf6" stroke-width="1.5"/>
+  <text x="396" y="272" text-anchor="middle" fill="#c4b5fd" font-size="11">Списать оплату</text>
+  <rect x="460" y="252" width="112" height="32" rx="16" fill="rgba(139,92,246,0.12)" stroke="#8b5cf6" stroke-width="1.5"/>
+  <text x="516" y="272" text-anchor="middle" fill="#c4b5fd" font-size="11">Создать заказ</text>
+
+  <!-- Join -->
+  <line x1="396" y1="284" x2="396" y2="298" stroke="#71717a" stroke-width="1.5"/>
+  <line x1="516" y1="284" x2="516" y2="298" stroke="#71717a" stroke-width="1.5"/>
+  <rect x="382" y="298" width="148" height="5" rx="2" fill="#8b5cf6"/>
+  <line x1="456" y1="303" x2="456" y2="315" stroke="#71717a" stroke-width="1.5" marker-end="url(#act-arr)"/>
+
+  <!-- Activity Final -->
+  <circle cx="456" cy="316" r="7" fill="none" stroke="#10b981" stroke-width="2"/>
+  <circle cx="456" cy="316" r="4" fill="#10b981"/>
+</svg>
 </div>
 
 <!-- ══ COMPONENT ══ -->
@@ -3571,6 +3638,95 @@ id (UUID), first_name (VARCHAR), birth_date (DATE), is_active (BOOLEAN).
   <tr><td><strong>Dependency</strong></td><td>- -▶ пунктир</td><td>Компонент А зависит от компонента Б</td></tr>
   <tr><td><strong>Package / Subsystem</strong></td><td>▭ с ярлыком сверху</td><td>Группа связанных компонентов</td></tr>
 </table>
+
+<svg class="diagram" viewBox="0 0 640 300" style="max-height:300px">
+  <defs>
+    <marker id="comp-dep" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#8b5cf6"/></marker>
+  </defs>
+
+  <!-- Package: Frontend -->
+  <rect x="20" y="30" width="180" height="200" rx="10" fill="rgba(20,184,166,0.05)" stroke="rgba(20,184,166,0.3)" stroke-width="1.5" stroke-dasharray="6,3"/>
+  <rect x="20" y="18" width="90" height="16" rx="4" fill="rgba(20,184,166,0.2)" stroke="rgba(20,184,166,0.3)" stroke-width="1"/>
+  <text x="65" y="30" text-anchor="middle" fill="#5eead4" font-size="10" font-family="'Unbounded',sans-serif">Frontend</text>
+
+  <!-- Component: Web App -->
+  <rect x="36" y="48" width="148" height="50" rx="8" fill="rgba(20,184,166,0.12)" stroke="#14b8a6" stroke-width="1.5"/>
+  <!-- Component icon (two small rects) -->
+  <rect x="38" y="53" width="12" height="8" rx="1" fill="#14b8a6"/>
+  <rect x="38" y="65" width="12" height="8" rx="1" fill="#14b8a6"/>
+  <text x="100" y="68" text-anchor="middle" fill="#5eead4" font-size="12" font-weight="600">Web App</text>
+  <text x="100" y="84" text-anchor="middle" fill="#14b8a6" font-size="10">«component»</text>
+
+  <!-- Component: Mobile App -->
+  <rect x="36" y="118" width="148" height="50" rx="8" fill="rgba(20,184,166,0.12)" stroke="#14b8a6" stroke-width="1.5"/>
+  <rect x="38" y="123" width="12" height="8" rx="1" fill="#14b8a6"/>
+  <rect x="38" y="135" width="12" height="8" rx="1" fill="#14b8a6"/>
+  <text x="100" y="138" text-anchor="middle" fill="#5eead4" font-size="12" font-weight="600">Mobile App</text>
+  <text x="100" y="154" text-anchor="middle" fill="#14b8a6" font-size="10">«component»</text>
+
+  <!-- Provided interface from Web App (lollipop) -->
+  <line x1="184" y1="73" x2="215" y2="73" stroke="#14b8a6" stroke-width="1.5"/>
+  <circle cx="222" cy="73" r="7" fill="none" stroke="#14b8a6" stroke-width="1.5"/>
+
+  <!-- Required interface from Mobile App (half circle) -->
+  <line x1="184" y1="143" x2="215" y2="143" stroke="#14b8a6" stroke-width="1.5"/>
+  <path d="M215,136 A7,7 0 0,1 215,150" fill="none" stroke="#14b8a6" stroke-width="1.5"/>
+
+  <!-- Package: Backend -->
+  <rect x="240" y="30" width="200" height="200" rx="10" fill="rgba(139,92,246,0.05)" stroke="rgba(139,92,246,0.3)" stroke-width="1.5" stroke-dasharray="6,3"/>
+  <rect x="240" y="18" width="90" height="16" rx="4" fill="rgba(139,92,246,0.2)" stroke="rgba(139,92,246,0.3)" stroke-width="1"/>
+  <text x="285" y="30" text-anchor="middle" fill="#c4b5fd" font-size="10" font-family="'Unbounded',sans-serif">Backend</text>
+
+  <!-- Component: API Gateway -->
+  <rect x="256" y="48" width="168" height="50" rx="8" fill="rgba(139,92,246,0.12)" stroke="#8b5cf6" stroke-width="1.5"/>
+  <rect x="258" y="53" width="12" height="8" rx="1" fill="#8b5cf6"/>
+  <rect x="258" y="65" width="12" height="8" rx="1" fill="#8b5cf6"/>
+  <text x="340" y="68" text-anchor="middle" fill="#c4b5fd" font-size="12" font-weight="600">API Gateway</text>
+  <text x="340" y="84" text-anchor="middle" fill="#8b5cf6" font-size="10">«component»</text>
+
+  <!-- Component: Auth Service -->
+  <rect x="256" y="118" width="168" height="50" rx="8" fill="rgba(139,92,246,0.12)" stroke="#8b5cf6" stroke-width="1.5"/>
+  <rect x="258" y="123" width="12" height="8" rx="1" fill="#8b5cf6"/>
+  <rect x="258" y="135" width="12" height="8" rx="1" fill="#8b5cf6"/>
+  <text x="340" y="138" text-anchor="middle" fill="#c4b5fd" font-size="12" font-weight="600">Auth Service</text>
+  <text x="340" y="154" text-anchor="middle" fill="#8b5cf6" font-size="10">«component»</text>
+
+  <!-- Dependency arrows (dashed) Web→API -->
+  <line x1="229" y1="73" x2="255" y2="73" stroke="#8b5cf6" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#comp-dep)"/>
+  <!-- Mobile→API -->
+  <line x1="224" y1="143" x2="255" y2="130" stroke="#8b5cf6" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#comp-dep)"/>
+  <!-- API→Auth -->
+  <line x1="340" y1="98" x2="340" y2="117" stroke="#8b5cf6" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#comp-dep)"/>
+
+  <!-- Package: Data -->
+  <rect x="460" y="30" width="165" height="200" rx="10" fill="rgba(245,158,11,0.05)" stroke="rgba(245,158,11,0.3)" stroke-width="1.5" stroke-dasharray="6,3"/>
+  <rect x="460" y="18" width="70" height="16" rx="4" fill="rgba(245,158,11,0.2)" stroke="rgba(245,158,11,0.3)" stroke-width="1"/>
+  <text x="495" y="30" text-anchor="middle" fill="#fcd34d" font-size="10" font-family="'Unbounded',sans-serif">Data</text>
+
+  <!-- Component: Database -->
+  <rect x="474" y="48" width="136" height="50" rx="8" fill="rgba(245,158,11,0.12)" stroke="#f59e0b" stroke-width="1.5"/>
+  <rect x="476" y="53" width="12" height="8" rx="1" fill="#f59e0b"/>
+  <rect x="476" y="65" width="12" height="8" rx="1" fill="#f59e0b"/>
+  <text x="542" y="68" text-anchor="middle" fill="#fcd34d" font-size="12" font-weight="600">PostgreSQL</text>
+  <text x="542" y="84" text-anchor="middle" fill="#f59e0b" font-size="10">«database»</text>
+
+  <!-- Component: Cache -->
+  <rect x="474" y="118" width="136" height="50" rx="8" fill="rgba(245,158,11,0.12)" stroke="#f59e0b" stroke-width="1.5"/>
+  <rect x="476" y="123" width="12" height="8" rx="1" fill="#f59e0b"/>
+  <rect x="476" y="135" width="12" height="8" rx="1" fill="#f59e0b"/>
+  <text x="542" y="138" text-anchor="middle" fill="#fcd34d" font-size="12" font-weight="600">Redis Cache</text>
+  <text x="542" y="154" text-anchor="middle" fill="#f59e0b" font-size="10">«component»</text>
+
+  <!-- API→DB dependency -->
+  <line x1="424" y1="73" x2="472" y2="73" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#comp-dep)"/>
+  <!-- API→Cache -->
+  <line x1="424" y1="83" x2="472" y2="130" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#comp-dep)"/>
+
+  <!-- Labels -->
+  <text x="110" y="250" text-anchor="middle" fill="#71717a" font-size="10">○ — provided interface</text>
+  <text x="110" y="265" text-anchor="middle" fill="#71717a" font-size="10">⌒ — required interface</text>
+  <text x="380" y="250" text-anchor="middle" fill="#71717a" font-size="10">- - ▶ — dependency</text>
+</svg>
 </div>
 
 <!-- ══ EPC ══ -->
@@ -3589,6 +3745,75 @@ id (UUID), first_name (VARCHAR), birth_date (DATE), is_active (BOOLEAN).
   <tr><td><strong>AND</strong></td><td>∧ коннектор</td><td>Все пути активируются параллельно</td></tr>
   <tr><td><strong>Правило чередования</strong></td><td>Событие → Функция → Событие</td><td>Строгое требование нотации! Два события или две функции подряд — ошибка</td></tr>
 </table>
+
+<svg class="diagram" viewBox="0 0 640 330" style="max-height:330px">
+  <defs>
+    <marker id="epc-arr" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#71717a"/></marker>
+  </defs>
+
+  <!-- Start Event: Заказ получен -->
+  <polygon points="100,20 140,46 140,98 100,124 60,98 60,46" fill="rgba(20,184,166,0.12)" stroke="#14b8a6" stroke-width="1.5"/>
+  <text x="100" y="66" text-anchor="middle" fill="#5eead4" font-size="11" font-weight="600">Заказ</text>
+  <text x="100" y="82" text-anchor="middle" fill="#5eead4" font-size="11" font-weight="600">получен</text>
+  <text x="100" y="138" text-anchor="middle" fill="#71717a" font-size="9">«событие»</text>
+  <line x1="100" y1="124" x2="100" y2="148" stroke="#71717a" stroke-width="1.5" marker-end="url(#epc-arr)"/>
+
+  <!-- Function: Проверить оплату -->
+  <rect x="30" y="148" width="140" height="44" rx="10" fill="rgba(139,92,246,0.12)" stroke="#8b5cf6" stroke-width="1.5"/>
+  <text x="100" y="168" text-anchor="middle" fill="#c4b5fd" font-size="12" font-weight="600">Проверить</text>
+  <text x="100" y="184" text-anchor="middle" fill="#c4b5fd" font-size="12" font-weight="600">оплату</text>
+  <text x="100" y="207" text-anchor="middle" fill="#71717a" font-size="9">«функция»</text>
+  <line x1="100" y1="192" x2="100" y2="216" stroke="#71717a" stroke-width="1.5" marker-end="url(#epc-arr)"/>
+
+  <!-- Event: Оплата проверена -->
+  <polygon points="100,216 140,242 140,294 100,320 60,294 60,242" fill="rgba(20,184,166,0.12)" stroke="#14b8a6" stroke-width="1.5"/>
+  <text x="100" y="262" text-anchor="middle" fill="#5eead4" font-size="11" font-weight="600">Оплата</text>
+  <text x="100" y="278" text-anchor="middle" fill="#5eead4" font-size="11" font-weight="600">проверена</text>
+  <line x1="100" y1="320" x2="100" y2="328" stroke="#71717a" stroke-width="1.5"/>
+
+  <!-- XOR connector -->
+  <line x1="100" y1="328" x2="300" y2="328" stroke="#71717a" stroke-width="1.5"/>
+  <circle cx="300" cy="328" r="16" fill="rgba(245,158,11,0.1)" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="300" y="333" text-anchor="middle" fill="#fcd34d" font-size="13" font-weight="700">×</text>
+  <text x="300" y="316" text-anchor="middle" fill="#f59e0b" font-size="9">XOR</text>
+
+  <!-- Two paths from XOR -->
+  <line x1="300" y1="312" x2="300" y2="60" stroke="#71717a" stroke-width="1.5"/>
+  <!-- Path Да -->
+  <line x1="300" y1="60" x2="380" y2="60" stroke="#71717a" stroke-width="1.5" marker-end="url(#epc-arr)"/>
+  <text x="340" y="52" text-anchor="middle" fill="#10b981" font-size="10">[Оплата ок]</text>
+
+  <!-- Path Нет -->
+  <line x1="300" y1="200" x2="380" y2="200" stroke="#71717a" stroke-width="1.5" marker-end="url(#epc-arr)"/>
+  <text x="340" y="192" text-anchor="middle" fill="#f43f5e" font-size="10">[Отказ]</text>
+
+  <!-- Function: Отгрузить -->
+  <rect x="380" y="38" width="148" height="44" rx="10" fill="rgba(139,92,246,0.12)" stroke="#8b5cf6" stroke-width="1.5"/>
+  <text x="454" y="58" text-anchor="middle" fill="#c4b5fd" font-size="12" font-weight="600">Отгрузить</text>
+  <text x="454" y="74" text-anchor="middle" fill="#c4b5fd" font-size="12" font-weight="600">товар</text>
+  <line x1="454" y1="82" x2="454" y2="106" stroke="#71717a" stroke-width="1.5" marker-end="url(#epc-arr)"/>
+
+  <!-- Event: Заказ отгружен -->
+  <polygon points="454,106 494,132 494,180 454,206 414,180 414,132" fill="rgba(16,185,129,0.1)" stroke="#10b981" stroke-width="1.5"/>
+  <text x="454" y="152" text-anchor="middle" fill="#6ee7b7" font-size="11">Заказ</text>
+  <text x="454" y="168" text-anchor="middle" fill="#6ee7b7" font-size="11">отгружен</text>
+
+  <!-- Function: Уведомить об ошибке -->
+  <rect x="380" y="178" width="148" height="44" rx="10" fill="rgba(244,63,94,0.1)" stroke="#f43f5e" stroke-width="1.5"/>
+  <text x="454" y="198" text-anchor="middle" fill="#fda4af" font-size="12" font-weight="600">Уведомить</text>
+  <text x="454" y="214" text-anchor="middle" fill="#fda4af" font-size="12" font-weight="600">об ошибке</text>
+  <line x1="454" y1="222" x2="454" y2="246" stroke="#71717a" stroke-width="1.5" marker-end="url(#epc-arr)"/>
+
+  <!-- Event: Клиент уведомлён -->
+  <polygon points="454,246 494,272 494,316 454,330 414,316 414,272" fill="rgba(244,63,94,0.08)" stroke="#f43f5e" stroke-width="1.5"/>
+  <text x="454" y="290" text-anchor="middle" fill="#fda4af" font-size="11">Клиент</text>
+  <text x="454" y="306" text-anchor="middle" fill="#fda4af" font-size="11">уведомлён</text>
+
+  <!-- Labels -->
+  <text x="18" y="12" fill="#14b8a6" font-size="10">⬡ событие</text>
+  <text x="18" y="26" fill="#8b5cf6" font-size="10">▭ функция</text>
+  <text x="18" y="40" fill="#f59e0b" font-size="10">○ коннектор XOR</text>
+</svg>
 </div>
 
 <div id="dp-context" class="diag-panel">
