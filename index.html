@@ -1220,6 +1220,66 @@ select.fb-input option {
 .rb-print-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(139,92,246,0.4); }
 .rb-reset-btn { padding: 11px 14px; border-radius: 10px; border: 1px solid var(--border); background: none; color: var(--text2); cursor: pointer; font-size: 13px; font-family: 'Golos Text', sans-serif; transition: all .2s; }
 .rb-reset-btn:hover { border-color: #f43f5e; color: #f43f5e; }
+.rb-ai-btn {
+  width: 100%; margin-top: 10px; padding: 12px;
+  border-radius: 12px; border: 1px solid rgba(139,92,246,0.4);
+  background: rgba(139,92,246,0.08);
+  color: #c4b5fd; font-family: 'Golos Text', sans-serif;
+  font-size: 13.5px; font-weight: 600; cursor: pointer;
+  transition: all .25s; display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.rb-ai-btn:hover { background: rgba(139,92,246,0.18); border-color: var(--accent); transform: translateY(-1px); box-shadow: 0 4px 20px rgba(139,92,246,0.25); }
+.rb-ai-btn-icon { font-size: 16px; }
+
+/* AI ANALYSIS PANEL */
+.rba-panel {
+  margin-top: 32px; border-radius: 20px;
+  border: 1px solid rgba(139,92,246,0.25);
+  background: rgba(139,92,246,0.04);
+  overflow: hidden;
+}
+.rba-panel-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 24px; border-bottom: 1px solid rgba(139,92,246,0.15);
+  background: rgba(139,92,246,0.08);
+}
+.rba-panel-title { font-size: 15px; font-weight: 700; color: #c4b5fd; font-family: 'Unbounded', sans-serif; }
+.rba-close { background: none; border: 1px solid rgba(139,92,246,0.3); border-radius: 8px; color: #c4b5fd; cursor: pointer; width: 28px; height: 28px; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all .2s; }
+.rba-close:hover { background: rgba(244,63,94,0.1); border-color: #f43f5e; color: #f43f5e; }
+.rba-loading { padding: 48px 24px; text-align: center; }
+.rba-result-inner { padding: 24px; }
+.rba-score-row { display: flex; align-items: center; gap: 20px; margin-bottom: 24px; padding: 18px 20px; background: rgba(0,0,0,0.15); border-radius: 14px; border: 1px solid var(--border); }
+.rba-score-num { font-size: 42px; font-weight: 700; font-family: 'Unbounded', sans-serif; line-height: 1; }
+.rba-score-label { font-size: 11px; color: var(--text3); margin-top: 4px; }
+.rba-score-comment { font-size: 14px; color: var(--text2); line-height: 1.6; }
+.rba-positives { margin-bottom: 20px; }
+.rba-positives-title { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: #10b981; font-family: 'Unbounded', sans-serif; margin-bottom: 10px; }
+.rba-positive { font-size: 13px; color: #6ee7b7; padding: 4px 0; display: flex; gap: 8px; }
+.rba-positive::before { content: '✓'; flex-shrink: 0; }
+.rba-issues-title { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent); font-family: 'Unbounded', sans-serif; margin-bottom: 12px; margin-top: 4px; }
+.rba-issue {
+  background: var(--bg-glass); border: 1px solid var(--border);
+  border-radius: 14px; padding: 16px 18px; margin-bottom: 12px;
+}
+.rba-issue-section { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--accent); font-family: 'Unbounded', sans-serif; margin-bottom: 6px; }
+.rba-issue-problem { font-size: 13px; color: #fda4af; margin-bottom: 10px; }
+.rba-issue-improved { font-size: 13px; color: var(--text2); background: rgba(0,0,0,0.2); border-radius: 8px; padding: 10px 12px; line-height: 1.6; margin-bottom: 10px; border-left: 3px solid #10b981; }
+.rba-apply-btn {
+  padding: 7px 16px; border-radius: 8px; border: 1px solid rgba(16,185,129,0.4);
+  background: rgba(16,185,129,0.1); color: #6ee7b7; font-size: 12px;
+  cursor: pointer; font-family: 'Golos Text', sans-serif; font-weight: 600;
+  transition: all .2s;
+}
+.rba-apply-btn:hover { background: rgba(16,185,129,0.2); border-color: #10b981; }
+.rba-apply-all-btn {
+  width: 100%; margin-top: 16px; padding: 12px;
+  border-radius: 12px; border: none;
+  background: linear-gradient(135deg, #10b981, #14b8a6);
+  color: white; font-family: 'Golos Text', sans-serif;
+  font-size: 14px; font-weight: 700; cursor: pointer;
+  transition: all .2s;
+}
+.rba-apply-all-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(16,185,129,0.4); }
 
 /* PREVIEW */
 .rb-preview-col { position: sticky; top: 20px; }
@@ -7132,6 +7192,9 @@ ROI = (<span class="tmpl-field">[выгода]</span> − <span class="tmpl-fiel
       <button class="rb-print-btn" onclick="rbPrint()">🖨 Распечатать / Сохранить PDF</button>
       <button class="rb-reset-btn" onclick="rbReset()">Сбросить</button>
     </div>
+    <button class="rb-ai-btn" id="rb-ai-btn" onclick="rbAiAnalyze()">
+      <span class="rb-ai-btn-icon">✦</span> AI-анализ резюме
+    </button>
   </div>
 
   <!-- ПРЕВЬЮ -->
@@ -7143,6 +7206,22 @@ ROI = (<span class="tmpl-field">[выгода]</span> − <span class="tmpl-fiel
     <div class="resume-paper" id="resume-paper">
       <div class="res-empty-hint" style="text-align:center;padding:60px 0">Начни заполнять форму — резюме появится здесь</div>
     </div>
+  </div>
+</div>
+
+<!-- AI АНАЛИЗ ПАНЕЛЬ -->
+<div class="rba-panel" id="rba-panel" style="display:none">
+  <div class="rba-panel-head">
+    <div class="rba-panel-title">✦ AI-анализ резюме</div>
+    <button class="rba-close" onclick="document.getElementById('rba-panel').style.display='none'">✕</button>
+  </div>
+  <div id="rba-content">
+    <div class="rba-loading" id="rba-loading">
+      <div class="jobs-spinner" style="margin:0 auto 16px"></div>
+      <div style="font-size:14px;color:var(--text2)">Анализирую резюме...</div>
+      <div style="font-size:12px;color:var(--text3);margin-top:6px">GPT читает все разделы и готовит рекомендации</div>
+    </div>
+    <div id="rba-result" style="display:none"></div>
   </div>
 </div>
 </div>
@@ -9134,6 +9213,161 @@ function wmModalClose(e) {
   if (!e || e.target === document.getElementById('wm-modal-overlay') || e.currentTarget?.classList.contains('wm-modal-close')) {
     document.getElementById('wm-modal-overlay').classList.remove('show');
   }
+}
+
+/* ══ AI АНАЛИЗ РЕЗЮМЕ ══ */
+let _rbaIssues = [];
+
+async function rbAiAnalyze() {
+  const panel   = document.getElementById('rba-panel');
+  const loading = document.getElementById('rba-loading');
+  const result  = document.getElementById('rba-result');
+  const btn     = document.getElementById('rb-ai-btn');
+
+  // Собираем данные резюме
+  const name     = document.getElementById('rb-name')?.value || '';
+  const pos      = document.getElementById('rb-pos')?.value  || '';
+  const city     = document.getElementById('rb-city')?.value || '';
+  const summary  = document.getElementById('rb-summary')?.value || '';
+  const edu      = document.getElementById('rb-edu')?.value  || '';
+  const courses  = document.getElementById('rb-courses')?.value || '';
+  const projects = document.getElementById('rb-projects')?.value || '';
+
+  const skills = [...document.querySelectorAll('.rb-chip.on')]
+    .map(c => c.textContent.trim()).join(', ');
+
+  const expBlocks = document.querySelectorAll('.rb-exp-block');
+  const experience = [...expBlocks].map(b => {
+    const company = b.querySelector('[data-rb="company"]')?.value || '';
+    const role    = b.querySelector('[data-rb="role"]')?.value    || '';
+    const period  = b.querySelector('[data-rb="period"]')?.value  || '';
+    const desc    = b.querySelector('[data-rb="desc"]')?.value    || '';
+    return `${role} в ${company} (${period}): ${desc}`;
+  }).join('\n');
+
+  if (!name && !summary && !skills) {
+    alert('Заполни хотя бы ФИО, Summary и навыки прежде чем запускать анализ.');
+    return;
+  }
+
+  panel.style.display = 'block';
+  loading.style.display = 'block';
+  result.style.display = 'none';
+  btn.disabled = true;
+  btn.textContent = 'Анализирую...';
+  panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  const prompt = `Ты — опытный HR и карьерный консультант специализирующийся на системных аналитиках. Проанализируй резюме и верни ТОЛЬКО валидный JSON без markdown.
+
+Резюме:
+ФИО: ${name}
+Должность: ${pos}
+Город: ${city}
+О себе: ${summary}
+Навыки: ${skills}
+Опыт: ${experience || 'не указан'}
+Образование: ${edu}
+Курсы: ${courses}
+Проекты: ${projects}
+
+Верни JSON строго такого формата:
+{
+  "score": <число 1-10>,
+  "score_comment": "<одна фраза об общем впечатлении>",
+  "positives": ["<что хорошо>", "<что хорошо>"],
+  "issues": [
+    {
+      "section": "<название раздела по-русски>",
+      "field_id": "<rb-summary | rb-edu | rb-courses | rb-projects | skills>",
+      "problem": "<в чём проблема, 1-2 предложения>",
+      "improved": "<улучшенный текст для вставки в поле>"
+    }
+  ]
+}
+Давай не более 4-5 issues. Improved должен быть реалистичным и конкретным текстом для вставки.`;
+
+  try {
+    const resp = await fetch('/.netlify/functions/ai', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'gpt-4o',
+        max_tokens: 1800,
+        temperature: 0.5,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+    const data = await resp.json();
+    const text = data.choices?.[0]?.message?.content || '';
+
+    // Парсим JSON из ответа
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) throw new Error('Некорректный ответ от AI');
+    const analysis = JSON.parse(jsonMatch[0]);
+
+    _rbaIssues = analysis.issues || [];
+
+    // Цвет оценки
+    const score = analysis.score || 0;
+    const scoreColor = score >= 8 ? '#10b981' : score >= 6 ? '#f59e0b' : '#f43f5e';
+
+    result.innerHTML = `
+      <div class="rba-result-inner">
+        <div class="rba-score-row">
+          <div>
+            <div class="rba-score-num" style="color:${scoreColor}">${score}<span style="font-size:22px;color:var(--text3)">/10</span></div>
+            <div class="rba-score-label">Оценка резюме</div>
+          </div>
+          <div class="rba-score-comment">${_e(analysis.score_comment || '')}</div>
+        </div>
+
+        ${analysis.positives?.length ? `
+        <div class="rba-positives">
+          <div class="rba-positives-title">Что хорошо</div>
+          ${analysis.positives.map(p => `<div class="rba-positive">${_e(p)}</div>`).join('')}
+        </div>` : ''}
+
+        ${_rbaIssues.length ? `
+        <div class="rba-issues-title">Рекомендации</div>
+        ${_rbaIssues.map((issue, i) => `
+          <div class="rba-issue">
+            <div class="rba-issue-section">${_e(issue.section)}</div>
+            <div class="rba-issue-problem">⚠ ${_e(issue.problem)}</div>
+            ${issue.improved ? `<div class="rba-issue-improved">${_e(issue.improved)}</div>
+            <button class="rba-apply-btn" onclick="rbaApplyOne(${i})">✓ Применить</button>` : ''}
+          </div>`).join('')}
+        <button class="rba-apply-all-btn" onclick="rbaApplyAll()">✦ Применить все улучшения</button>
+        ` : '<div style="color:#6ee7b7;text-align:center;padding:12px">Резюме в отличной форме! Замечаний нет.</div>'}
+      </div>`;
+
+    loading.style.display = 'none';
+    result.style.display = 'block';
+
+  } catch(e) {
+    loading.innerHTML = `<div style="color:#fda4af;font-size:14px">Ошибка: ${e.message}</div>`;
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<span class="rb-ai-btn-icon">✦</span> AI-анализ резюме';
+  }
+}
+
+function rbaApplyOne(i) {
+  const issue = _rbaIssues[i];
+  if (!issue?.improved || !issue?.field_id) return;
+  const el = document.getElementById(issue.field_id);
+  if (el) {
+    el.value = issue.improved;
+    el.dispatchEvent(new Event('input'));
+    // визуальный отклик
+    el.style.borderColor = '#10b981';
+    setTimeout(() => { el.style.borderColor = ''; }, 1500);
+  }
+}
+
+function rbaApplyAll() {
+  _rbaIssues.forEach((_, i) => rbaApplyOne(i));
+  const allBtns = document.querySelectorAll('.rba-apply-btn');
+  allBtns.forEach(b => { b.textContent = '✓ Применено'; b.disabled = true; b.style.opacity = '.6'; });
 }
 
 /* ══ КАРТА РАБОТЫ СА ══ */
