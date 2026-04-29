@@ -2251,58 +2251,218 @@ id (UUID), first_name (VARCHAR), birth_date (DATE), is_active (BOOLEAN).
 <div class="section" id="tab-reqs">
 <div class="section-header">
   <div class="section-tag">Раздел 3 · Требования</div>
-  <div class="section-title">Виды требований (Иерархия)</div>
-  <div class="section-desc">Требования — это то, ЧТО должна делать система и КАК ХОРОШО она должна это делать.</div>
+  <div class="section-title">Виды требований</div>
+  <div class="section-desc">Требования отвечают на два вопроса: ЧТО система должна делать (функциональные) и КАК ХОРОШО она должна это делать (нефункциональные). Знать иерархию — значит понимать откуда берётся каждое требование и кто за него отвечает.</div>
 </div>
-<div class="acc" onclick="toggle(this)">
-  <div class="acc-head"><span class="badge bp" style="margin-right:8px">BR</span> Бизнес-требования (Зачем?)<div class="acc-chevron">▼</div></div>
-  <div class="acc-body"><p>Высокоуровневая цель бизнеса. Пример: «Увеличить конверсию в покупку на 15% за счет внедрения покупки в 1 клик».</p></div>
+
+<!-- Иерархия -->
+<div class="ex ex-purple">
+  <div class="ex-label">Иерархия требований</div>
+  <p>Бизнес-требования → Пользовательские требования → Функциональные требования → Системные требования. Каждый уровень детализирует предыдущий. Если FR противоречит BR — это ошибка аналитика.</p>
 </div>
+
+<!-- BR -->
 <div class="acc" onclick="toggle(this)">
-  <div class="acc-head"><span class="badge" style="background:rgba(245,158,11,0.2); color:#f59e0b; border:1px solid #f59e0b; margin-right:8px">BRules</span> Бизнес-правила<div class="acc-chevron">▼</div></div>
+  <div class="acc-head"><span class="badge bp" style="margin-right:8px">BR</span> Бизнес-требования — Зачем вообще делаем?<div class="acc-chevron">▼</div></div>
   <div class="acc-body">
-    <p>Политики, формулы и законы, которые определяют работу бизнеса <strong>независимо от того, существует ли IT-система вообще</strong>. Система должна им строго подчиняться.</p>
-    <ul>
-      <li><strong>Правило расчета:</strong> Скидка VIP-клиента составляет 15%, но не более 5000 рублей.</li>
-      <li><strong>Ограничение:</strong> Пользователь младше 18 лет не может купить алкоголь (согласно закону РФ).</li>
-      <li><strong>Событие:</strong> Если платеж просрочен на 3 дня, начисляется пени 1% за каждый день.</li>
-    </ul>
-    <p>Аналитик собирает их в отдельный реестр (матрицу бизнес-правил), чтобы кодеры могли вынести эту логику в отдельные микросервисы (Decision Engines).</p>
+    <p><strong>Определение:</strong> Высокоуровневые цели организации которые должна поддержать система. Отвечают на вопрос «Зачем?» — не «Что?» и не «Как?». Формулируются бизнесом, фиксируются аналитиком.</p>
+
+    <div class="ex ex-green" style="margin:14px 0">
+      <div class="ex-label">Откуда берутся</div>
+      <p>Из стратегии компании, проблем которые нужно решить, KPI которые нужно улучшить. Источники: CEO, Product Owner, директор направления.</p>
+    </div>
+
+    <table>
+      <tr><th>Компонент BR</th><th>Описание</th><th>Пример</th></tr>
+      <tr><td><strong>Проблема</strong></td><td>Что сейчас не так</td><td>Конверсия из корзины в покупку — 12%, ниже рынка</td></tr>
+      <tr><td><strong>Цель</strong></td><td>Измеримый результат</td><td>Увеличить конверсию до 20% за 6 месяцев</td></tr>
+      <tr><td><strong>Метрика успеха</strong></td><td>Как поймём что достигли</td><td>CR ≥ 20% в течение 3 месяцев после запуска</td></tr>
+      <tr><td><strong>Ограничения</strong></td><td>Бюджет, сроки, рамки</td><td>Бюджет 2 млн ₽, запуск до Q3 2026</td></tr>
+    </table>
+
+    <div class="compare-grid" style="margin-top:16px">
+      <div class="compare-card">
+        <div class="compare-label c-red">❌ Плохо</div>
+        <p style="font-size:13px;color:var(--text2);margin-top:8px">«Нужно сделать кнопку быстрой покупки» — это уже решение, не бизнес-требование. Где проблема? Где метрика?</p>
+      </div>
+      <div class="compare-card">
+        <div class="compare-label c-teal">✅ Хорошо</div>
+        <p style="font-size:13px;color:var(--text2);margin-top:8px">«Снизить % брошенных корзин с 68% до 50% за счёт упрощения процесса оплаты. Целевой CR: 20%+»</p>
+      </div>
+    </div>
   </div>
 </div>
+
+<!-- BRules -->
 <div class="acc" onclick="toggle(this)">
-  <div class="acc-head"><span class="badge bt" style="margin-right:8px">UR</span> Пользовательские требования<div class="acc-chevron">▼</div></div>
-  <div class="acc-body"><p>Что юзер сможет делать в системе. Пример: «Как клиент, я хочу привязать карту для быстрой оплаты».</p></div>
-</div>
-<div class="acc" onclick="toggle(this)">
-  <div class="acc-head"><span class="badge by" style="margin-right:8px">FR</span> Функциональные (Что делает система?)<div class="acc-chevron">▼</div></div>
+  <div class="acc-head"><span class="badge" style="background:rgba(245,158,11,0.2);color:#f59e0b;border:1px solid #f59e0b;margin-right:8px">BR</span> Бизнес-правила — Законы домена<div class="acc-chevron">▼</div></div>
   <div class="acc-body">
-    <p>Детальное поведение системы.</p>
-    <ul>
-      <li>Система должна валидировать номер карты по алгоритму Луна.</li>
-      <li>Система должна списать сумму со счета по API банка.</li>
-    </ul>
+    <p><strong>Определение:</strong> Политики, формулы, ограничения и законы которые регулируют работу бизнеса <em>независимо от существования IT-системы</em>. Система обязана им подчиняться — она не изобретает правила, а автоматизирует их.</p>
+
+    <div class="ex ex-yellow" style="margin:14px 0">
+      <div class="ex-label">Ключевое отличие от FR</div>
+      <p>Бизнес-правило существует вне системы — оно было бы применено и вручную. FR описывает как система это автоматизирует. Пример: «VIP-скидка 15%» — бизнес-правило. «Система вычитает 15% из суммы заказа при статусе клиента VIP» — функциональное требование.</p>
+    </div>
+
+    <table>
+      <tr><th>Тип правила</th><th>Пример</th></tr>
+      <tr><td><strong>Расчётное</strong></td><td>Скидка VIP = 15%, но не более 5 000 ₽ за заказ</td></tr>
+      <tr><td><strong>Ограничивающее</strong></td><td>Пользователь младше 18 лет не может купить алкоголь (ФЗ-171)</td></tr>
+      <tr><td><strong>Событийное</strong></td><td>При просрочке более 3 дней начисляется пеня 0.1%/день</td></tr>
+      <tr><td><strong>Классификационное</strong></td><td>Клиент становится VIP при сумме заказов за год ≥ 100 000 ₽</td></tr>
+      <tr><td><strong>Авторизационное</strong></td><td>Менеджер может редактировать заказ только в статусе «Новый»</td></tr>
+    </table>
+
+    <div class="ex ex-green" style="margin-top:14px">
+      <div class="ex-label">Как фиксировать</div>
+      <p>Собирай в отдельный реестр бизнес-правил (таблица: ID, правило, источник, статус). Каждое правило ссылается на FR которые его реализуют. Это позволяет разработчикам вынести логику в Decision Engine и легко менять правила без code change.</p>
+    </div>
   </div>
 </div>
+
+<!-- UR -->
 <div class="acc" onclick="toggle(this)">
-  <div class="acc-head"><span class="badge bg2" style="margin-right:8px">NFR</span> Нефункциональные (Атрибуты качества)<div class="acc-chevron">▼</div></div>
+  <div class="acc-head"><span class="badge bt" style="margin-right:8px">UR</span> Пользовательские требования — Что пользователь хочет делать<div class="acc-chevron">▼</div></div>
   <div class="acc-body">
-    <ul>
-      <li><strong>Производительность:</strong> Система держит 1000 запросов в сек (RPS).</li>
-      <li><strong>Доступность:</strong> SLA не менее 99.9% времени.</li>
-      <li><strong>Безопасность:</strong> Пароли хранятся в хэшированном виде (Bcrypt).</li>
-    </ul>
+    <p><strong>Определение:</strong> Задачи которые пользователь должен уметь выполнять с помощью системы. Мост между бизнес-целями и конкретными функциями. Формулируются с позиции пользователя, не системы.</p>
+
+    <div class="ex ex-purple" style="margin:14px 0">
+      <div class="ex-label">Форматы записи</div>
+      <p><strong>User Story:</strong> «Как [роль] я хочу [действие] чтобы [ценность]»<br>
+      <strong>Use Case:</strong> «Пользователь оформляет заказ» — с шагами, предусловиями, альтернативами<br>
+      <strong>Job Story:</strong> «Когда [ситуация] я хочу [действие] чтобы [результат]»</p>
+    </div>
+
+    <table>
+      <tr><th>Элемент</th><th>Плохо</th><th>Хорошо</th></tr>
+      <tr><td><strong>Роль</strong></td><td>«Пользователь хочет...»</td><td>«Как менеджер по закупкам...»</td></tr>
+      <tr><td><strong>Действие</strong></td><td>«...видеть отчёты»</td><td>«...выгрузить отчёт по поставщикам за период»</td></tr>
+      <tr><td><strong>Ценность</strong></td><td>«...потому что это удобно»</td><td>«...чтобы согласовать бюджет с финансовым директором»</td></tr>
+    </table>
+
+    <div class="ex ex-green" style="margin-top:14px">
+      <div class="ex-label">Связь с другими уровнями</div>
+      <p>Одно бизнес-требование порождает несколько UR. Одно UR детализируется в несколько FR. Если UR не трейсится к BR — задай вопрос: «Зачем это бизнесу?»</p>
+    </div>
   </div>
 </div>
+
+<!-- FR -->
 <div class="acc" onclick="toggle(this)">
-  <div class="acc-head"><span class="badge bgr" style="margin-right:8px">SR</span> Системные требования<div class="acc-chevron">▼</div></div>
+  <div class="acc-head"><span class="badge by" style="margin-right:8px">FR</span> Функциональные требования — Что делает система<div class="acc-chevron">▼</div></div>
   <div class="acc-body">
-    <p>Требования к среде исполнения (железо, ОС, браузеры). Чаще всего пишутся для коробочного (On-Premise) ПО, которое устанавливается на сервера заказчика.</p>
-    <ul>
-      <li>Система должна разворачиваться на базе ОС Ubuntu 22.04 LTS.</li>
-      <li>СУБД должна быть PostgreSQL версии не ниже 14.0.</li>
-      <li>Минимальные аппаратные требования: 8 CPU, 32 GB RAM, 500 GB SSD.</li>
-    </ul>
+    <p><strong>Определение:</strong> Конкретное поведение системы в ответ на действия пользователя или внешние события. Описывают входные данные, обработку и выходной результат. Это основной контент ТЗ.</p>
+
+    <div class="ex ex-yellow" style="margin:14px 0">
+      <div class="ex-label">Шаблон написания FR</div>
+      <p><strong>«Система [действие] когда/если [условие], используя [данные/логику], и возвращает/показывает [результат]»</strong></p>
+    </div>
+
+    <table>
+      <tr><th>Тип FR</th><th>Пример</th></tr>
+      <tr><td><strong>Валидация</strong></td><td>Система проверяет номер карты по алгоритму Луна. При ошибке — показывает «Номер карты введён неверно» под полем</td></tr>
+      <tr><td><strong>Расчёт</strong></td><td>Система рассчитывает сумму к оплате = сумма корзины − скидка + стоимость доставки. Доставка бесплатна при сумме ≥ 3 000 ₽</td></tr>
+      <tr><td><strong>Интеграция</strong></td><td>Система отправляет запрос на списание в платёжный шлюз (POST /payments) с параметрами: orderId, amount, currency, cardToken</td></tr>
+      <tr><td><strong>Состояние</strong></td><td>После успешной оплаты система переводит заказ в статус «Оплачен» и отправляет письмо на email покупателя</td></tr>
+      <tr><td><strong>Доступ</strong></td><td>Кнопка «Удалить заказ» отображается только пользователям с ролью «Администратор»</td></tr>
+    </table>
+
+    <div class="compare-grid" style="margin-top:16px">
+      <div class="compare-card">
+        <div class="compare-label c-red">❌ Типичные ошибки FR</div>
+        <ul class="sdlc-list" style="margin-top:8px">
+          <li>«Система должна работать корректно» — не проверяемо</li>
+          <li>«Красивый интерфейс» — субъективно</li>
+          <li>«Система должна поддерживать оплату» — слишком общо</li>
+          <li>Смешивать FR с архитектурными решениями</li>
+        </ul>
+      </div>
+      <div class="compare-card">
+        <div class="compare-label c-teal">✅ Признаки хорошего FR</div>
+        <ul class="sdlc-list" style="margin-top:8px">
+          <li>Можно написать тест-кейс</li>
+          <li>Однозначно интерпретируется разработчиком и QA</li>
+          <li>Указаны все состояния: успех, ошибка, граничные случаи</li>
+          <li>Трейсируется к конкретному UR</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NFR -->
+<div class="acc" onclick="toggle(this)">
+  <div class="acc-head"><span class="badge bg2" style="margin-right:8px">NFR</span> Нефункциональные требования — Атрибуты качества<div class="acc-chevron">▼</div></div>
+  <div class="acc-body">
+    <p><strong>Определение:</strong> Ограничения на то КАК система выполняет функции — скорость, надёжность, безопасность, масштабируемость. NFR часто игнорируются на старте и всплывают как инциденты на продакшене.</p>
+
+    <div class="ex ex-red" style="margin:14px 0">
+      <div class="ex-label">Почему NFR критичны</div>
+      <p>«Работает» — это FR. «Работает за 200мс под нагрузкой 1000 пользователей с uptime 99.9%» — это FR + NFR. Без NFR система может выполнять все функции и при этом быть полностью непригодной для использования.</p>
+    </div>
+
+    <h3 style="margin-top:16px">Производительность (Performance)</h3>
+    <table>
+      <tr><th>Метрика</th><th>Что означает</th><th>Пример требования</th></tr>
+      <tr><td><strong>Latency</strong></td><td>Время ответа на один запрос</td><td>p95 времени ответа API ≤ 300 мс при нормальной нагрузке</td></tr>
+      <tr><td><strong>Throughput / RPS</strong></td><td>Сколько запросов в секунду держит система</td><td>Система выдерживает 500 RPS без деградации</td></tr>
+      <tr><td><strong>Concurrent users</strong></td><td>Одновременных пользователей</td><td>Система поддерживает 10 000 одновременных сессий</td></tr>
+    </table>
+
+    <h3 style="margin-top:16px">Надёжность (Reliability)</h3>
+    <table>
+      <tr><th>Метрика</th><th>Что означает</th><th>Пример</th></tr>
+      <tr><td><strong>SLA / Uptime</strong></td><td>Доступность системы в %</td><td>99.9% = не более 8.7 часов простоя в год</td></tr>
+      <tr><td><strong>RTO</strong></td><td>Recovery Time Objective — время восстановления</td><td>Система восстанавливается после сбоя за ≤ 4 часа</td></tr>
+      <tr><td><strong>RPO</strong></td><td>Recovery Point Objective — максимальная потеря данных</td><td>Потеря данных не более чем за 1 час до сбоя</td></tr>
+    </table>
+
+    <h3 style="margin-top:16px">Безопасность (Security)</h3>
+    <table>
+      <tr><th>Тип</th><th>Пример требования</th></tr>
+      <tr><td><strong>Аутентификация</strong></td><td>Все API-эндпоинты кроме /login и /register требуют Bearer JWT-токен</td></tr>
+      <tr><td><strong>Авторизация</strong></td><td>Пользователь не может получить данные заказа другого пользователя (IDOR защита)</td></tr>
+      <tr><td><strong>Хранение данных</strong></td><td>Пароли хранятся в виде bcrypt-хэша с cost factor ≥ 12</td></tr>
+      <tr><td><strong>Передача данных</strong></td><td>Все соединения только по HTTPS/TLS 1.2+</td></tr>
+      <tr><td><strong>Логирование</strong></td><td>Все операции с платёжными данными логируются с userId, timestamp, IP-адресом</td></tr>
+    </table>
+
+    <h3 style="margin-top:16px">Масштабируемость и Совместимость</h3>
+    <table>
+      <tr><th>Тип NFR</th><th>Пример</th></tr>
+      <tr><td><strong>Горизонтальное масштабирование</strong></td><td>Система должна масштабироваться добавлением экземпляров без изменения кода</td></tr>
+      <tr><td><strong>Браузерная совместимость</strong></td><td>Поддержка Chrome 100+, Firefox 100+, Safari 15+, Edge 100+</td></tr>
+      <tr><td><strong>Мобильная</strong></td><td>Корректное отображение на экранах от 320px, поддержка iOS 15+ и Android 10+</td></tr>
+      <tr><td><strong>Локализация</strong></td><td>Интерфейс поддерживает русский и английский язык. Переключение без перезагрузки</td></tr>
+    </table>
+
+    <div class="ex ex-green" style="margin-top:16px">
+      <div class="ex-label">Правило написания NFR</div>
+      <p>Каждый NFR должен быть <strong>измеримым</strong>. Не «система должна быть быстрой» — а «p95 времени ответа ≤ 200мс при нагрузке 500 RPS». Если нельзя написать тест — NFR написан неправильно.</p>
+    </div>
+  </div>
+</div>
+
+<!-- SR -->
+<div class="acc" onclick="toggle(this)">
+  <div class="acc-head"><span class="badge bgr" style="margin-right:8px">SR</span> Системные требования — Среда исполнения<div class="acc-chevron">▼</div></div>
+  <div class="acc-body">
+    <p><strong>Определение:</strong> Требования к аппаратному и программному обеспечению на котором должна работать система. Актуальны прежде всего для On-Premise решений которые устанавливаются на серверы заказчика.</p>
+
+    <div class="ex ex-yellow" style="margin:14px 0">
+      <div class="ex-label">Когда нужны SR</div>
+      <p>Всегда актуальны для: коробочного ПО, корпоративных систем (ERP, CRM на серверах заказчика), встроенных систем. Для SaaS/облака обычно достаточно NFR — среду контролирует разработчик.</p>
+    </div>
+
+    <table>
+      <tr><th>Категория</th><th>Пример требования</th></tr>
+      <tr><td><strong>ОС</strong></td><td>Ubuntu Server 22.04 LTS или RHEL 8+. Поддержка Windows Server 2019+ опциональна</td></tr>
+      <tr><td><strong>СУБД</strong></td><td>PostgreSQL ≥ 14.0 или MS SQL Server 2019+. Роль: владелец схемы + право создания расширений</td></tr>
+      <tr><td><strong>Аппаратное обеспечение</strong></td><td>Минимум: 8 vCPU, 32 GB RAM, 500 GB SSD. Рекомендуется: 16 vCPU, 64 GB RAM, 1 TB NVMe</td></tr>
+      <tr><td><strong>Сеть</strong></td><td>Канал ≥ 100 Мбит/с. Статические IP для серверов приложений. Открытые порты: 443, 8080</td></tr>
+      <tr><td><strong>Среда выполнения</strong></td><td>Java 17+ (JRE), Docker 24+, Kubernetes 1.27+ (если используется)</td></tr>
+      <tr><td><strong>Безопасность окружения</strong></td><td>SELinux в режиме enforcing. Firewall с белым списком. Запрет root-доступа по SSH</td></tr>
+    </table>
   </div>
 </div>
 
